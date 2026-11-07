@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Jauge et dégagements ERP – Côte Ouest</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{
+  --paper:#EEF1F5; --card:#FFFFFF; --ink:#17243A; --muted:#5E6B7D; --line:#D5DBE3;
+  --accent:#E3A900; --warn-bg:#FFF4D6; --field:#F7F9FB; --out:#E8EDF3; --focus:#2B6CB0; --bad:#B4372B;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111924; --card:#18222F; --ink:#E6EBF1; --muted:#9AA7B8; --line:#2B3747;
+    --accent:#F2C230; --warn-bg:#2A2414; --field:#121B26; --out:#223042; --focus:#7FB2F0; --bad:#F08A7E; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111924; --card:#18222F; --ink:#E6EBF1; --muted:#9AA7B8; --line:#2B3747;
+  --accent:#F2C230; --warn-bg:#2A2414; --field:#121B26; --out:#223042; --focus:#7FB2F0; --bad:#F08A7E; color-scheme: dark;
+}
+:root{ box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px); }
+html{ scroll-padding-top:env(safe-area-inset-top,0px); }
+*,*::before,*::after{ box-sizing:inherit; }
+body{ margin:0; background:var(--paper); color:var(--ink); font-family:"Barlow",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; font-size:16px; line-height:1.45; }
+.wrap{ max-width:1240px; margin:0 auto; padding:28px 20px 48px; }
+.logo{ display:block; height:64px; aspect-ratio:948.2/367; margin:0 0 10px -18px; background:var(--ink); -webkit-mask:var(--logo) no-repeat center/contain; mask:var(--logo) no-repeat center/contain; --logo:url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6ICQkJC9HZW5lcmFsU3RyLzE5Nj1BZG9iZSBJbGx1c3RyYXRvciAyNy42LjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYWxxdWVfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiCgkgdmlld0JveD0iMCAwIDk0OC4yIDM2NyIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgOTQ4LjIgMzY3OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+CjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+Cgkuc3Qwe2ZpbGw6I0ZGRkZGRjt9Cgkuc3Qxe2ZpbGw6I0ZGRkZGRjtmaWxsLW9wYWNpdHk6MDt9Cjwvc3R5bGU+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik0zMTUuNiw5MC40aC0xLjFjLTAuMiwwLTAuNCwwLTAuNywwLjFjLTEuNCwwLjItMi44LDAuNC00LjEsMC43Yy0xMi4xLDIuMi0yNC4xLDUuNy0zNi43LDEwLjlsLTAuNCwwLjIKCWMtMTEuMSw0LjYtMjIuMSw5LjgtMzMuNSwxNi4xbC0yMi40LTM0bC0xLjYsMWMtOCw1LTE2LjEsMTAuMS0yNCwxNS4xYy0xMS43LDcuNS0yMy45LDE1LjItMzYsMjIuNGMtMTMsNy44LTMwLjMsMTcuNi00OSwyNQoJYy0xMC41LDQuMi0yMy45LDcuOS0zNSw5LjhsLTEuNywwLjN2MS43Yy0wLjIsMTguNi0wLjUsOTQuMy0wLjUsOTUuMXYwLjZsMjYuNSw0MC4zbDEuMi0wLjFjMC4yLDAsMC4zLDAsMC41LTAuMWwwLjEsMAoJYzguNS0xLjMsMTctMy4zLDI1LjEtNS45YzAuNS0wLjEsNC44LTEuNiw2LTJsMC4zLTAuMWMxMy4yLTQuNywyNi45LTEwLjksNDIuOS0xOS42bDIyLjYsMzQuM2wxLjctMS4yYzItMS41LDQuMi0yLjgsNi4zLTQKCWMwLjktMC42LDEuOS0xLjIsMi44LTEuOGM1LjItMy4zLDEwLjQtNi42LDE1LjYtOS45YzExLjUtNy40LDIzLjUtMTUsMzUuNC0yMi4xYzEyLjUtNy41LDI5LjItMTcsNDcuNC0yNC40YzIuNC0xLDQuOC0xLjksNy4xLTIuOAoJYzkuNC0zLjQsMjAuMS02LjMsMjguOC03LjdsMS43LTAuM3YtOTguNUwzMTUuNiw5MC40TDMxNS42LDkwLjR6IE0xNzQuMywyMDQuMWwtNC40LDMuMWMtMTUuOCw5LjgtMzEuOCwxOS4zLTQ4LjcsMjcuMgoJYy0xMy40LDYuMy0zMC43LDEyLjItNDUuNCwxNS4yYzAuMS04LjYsMC41LTcxLjQsMC42LTg2YzIwLjQtNCw0MS40LTEyLjMsNTkuNy0yMS45YzE3LTguOSwzMy4zLTE5LjIsNDkuNS0yOS40TDIxMSw5Ni4ybDEtMC42CglsLTAuMywzNy43QzE4OS45LDE0NywxNjcuNSwxNjIsMTQ1LDE3NC42Yy05LjQsNS4zLTIwLjQsMTEtMzAuNCwxNS4zbDAsOS45YzcuNS0zLjMsMTYuNC03LjYsMjMuNS0xMS41CgljMTguOS0xMC4yLDM2LjktMjEuNyw1NC45LTMzLjNjNi4zLTQsMTkuNi0xMi40LDE5LjktMTIuN2MxMS4xLTcsMjIuMy0xMy43LDMzLjktMTkuOWMxNS45LTguNiwzMi4zLTE2LjIsNDkuOS0yMS4xCgljMy44LTEuMSw5LjQtMi41LDEzLjQtMy4ybC0wLjEsODQuOWMtMC4xLDAtMC4yLDAtMC4zLDAuMWMtMTIuOSwyLjgtMjUuNCw3LjItMzcuNSwxMi40YzAsMC0wLjEsMC0wLjEsMGMtMS42LDAuNy0zLjMsMS40LTUsMi4yCgljLTIwLjcsOS40LTQwLjEsMjEuMS01OS4zLDMzLjJjLTEwLjcsNi43LTIzLjEsMTQuMi0zMy45LDIxQzE3NC40LDIzNy43LDE3NC4zLDIwNS4xLDE3NC4zLDIwNC4xTDE3NC4zLDIwNC4xeiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNMjE1LDE4Ny44YzE4LjItMTEuMiwzNi41LTIyLjEsNTYtMzFjMC4xLTAuMSwwLjItMC4xLDAuMy0wLjF2LTEwYy0xNS4zLDYuOS0yOS45LDE1LjItNDQuMywyMy44CgljLTEuNiwwLjktMy4yLDEuOS00LjgsMi45Yy0yLjQsMS41LTQuOCwyLjktNy4yLDQuNGwwLDBjLTAuOCwwLjUtMS42LDEtMi41LDEuNWMtMC4xLDAuMS0wLjIsMC4xLTAuNCwwLjJ2MTAKCWMwLjEtMC4xLDAuMy0wLjEsMC41LTAuM0MyMTMuNCwxODguNywyMTQuMiwxODguMywyMTUsMTg3LjhMMjE1LDE4Ny44eiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNMzE1LjYsOTAuNGgtMS4xYy0wLjIsMC0wLjQsMC0wLjcsMC4xYy0xLjQsMC4yLTIuOCwwLjQtNC4xLDAuN2MtMTIuMSwyLjItMjQuMSw1LjctMzYuNywxMC45bC0wLjQsMC4yCgljLTExLjEsNC42LTIyLjEsOS44LTMzLjUsMTYuMWwtMjIuNC0zNC4xbC0xLjYsMWMtOCw1LTE2LjEsMTAuMS0yNCwxNS4xYy0xMS43LDcuNS0yMy45LDE1LjItMzYsMjIuNGMtMTMsNy44LTMwLjMsMTcuNi00OSwyNQoJYy0xMC41LDQuMi0yMy45LDcuOS0zNSw5LjhsLTEuNywwLjN2MS43Yy0wLjIsMTguNi0wLjUsOTQuMy0wLjUsOTUuMXYwLjZsMjYuNSw0MC4zbDEuMi0wLjFjMC4yLDAsMC4zLDAsMC41LTAuMWwwLjEsMAoJYzguNS0xLjMsMTctMy4zLDI1LjEtNS45YzAuNS0wLjEsNC44LTEuNiw2LTJsMC4zLTAuMWMxMy4yLTQuNywyNi45LTEwLjksNDIuOS0xOS42bDIyLjYsMzQuM2wxLjctMS4yYzItMS41LDQuMi0yLjgsNi4zLTQKCWMwLjktMC42LDEuOS0xLjIsMi44LTEuOGM1LjItMy4zLDEwLjQtNi42LDE1LjYtOS45YzExLjUtNy40LDIzLjUtMTUsMzUuNC0yMi4xYzEyLjUtNy41LDI5LjItMTcsNDcuNC0yNC40YzIuNC0xLDQuOC0xLjksNy4xLTIuOAoJYzkuNC0zLjQsMjAuMS02LjMsMjguOC03LjdsMS43LTAuM3YtOTguNUwzMTUuNiw5MC40TDMxNS42LDkwLjR6IE0xNzQuMywyMDRsLTQuNCwzLjFjLTE1LjgsOS44LTMxLjgsMTkuMy00OC43LDI3LjIKCWMtMTMuNCw2LjMtMzAuNywxMi4yLTQ1LjQsMTUuMmMwLjEtOC42LDAuNS03MS40LDAuNi04NmMyMC40LTQsNDEuNC0xMi4zLDU5LjctMjEuOWMxNy04LjksMzMuMy0xOS4yLDQ5LjUtMjkuNEwyMTEsOTYuMWwxLTAuNgoJbC0wLjMsMzcuN2MtMjEuOCwxMy43LTQ0LjIsMjguNy02Ni43LDQxLjNjLTkuNCw1LjMtMjAuNCwxMS0zMC40LDE1LjNsMCw5LjljNy41LTMuMywxNi40LTcuNiwyMy41LTExLjUKCWMxOC45LTEwLjIsMzYuOS0yMS43LDU0LjktMzMuM2M2LjMtNCwxOS42LTEyLjQsMTkuOS0xMi43YzExLjEtNywyMi4zLTEzLjcsMzMuOS0xOS45YzE1LjktOC42LDMyLjMtMTYuMiw0OS45LTIxLjEKCWMzLjgtMS4xLDkuNC0yLjUsMTMuNC0zLjJsLTAuMSw4NC45Yy0wLjEsMC0wLjIsMC0wLjMsMC4xYy0xMi45LDIuOC0yNS40LDcuMi0zNy41LDEyLjRjMCwwLTAuMSwwLTAuMSwwYy0xLjYsMC43LTMuMywxLjQtNSwyLjIKCWMtMjAuNyw5LjQtNDAuMSwyMS4xLTU5LjMsMzMuMmMtMTAuNyw2LjctMjMuMSwxNC4yLTMzLjksMjFDMTc0LjQsMjM3LjYsMTc0LjMsMjA1LjEsMTc0LjMsMjA0TDE3NC4zLDIwNHoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTIxNSwxODcuN2MxOC4yLTExLjIsMzYuNS0yMi4xLDU2LTMxYzAuMS0wLjEsMC4yLTAuMSwwLjMtMC4xdi0xMGMtMTUuMyw2LjktMjkuOSwxNS4yLTQ0LjMsMjMuOAoJYy0xLjYsMC45LTMuMiwxLjktNC44LDIuOWMtMi40LDEuNS00LjgsMi45LTcuMiw0LjRsMCwwYy0wLjgsMC41LTEuNiwxLTIuNSwxLjVjLTAuMSwwLjEtMC4yLDAuMS0wLjQsMC4ydjEwCgljMC4xLTAuMSwwLjMtMC4xLDAuNS0wLjNDMjEzLjQsMTg4LjcsMjE0LjIsMTg4LjIsMjE1LDE4Ny43eiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNDI3LjUsMTA1LjFjMS4zLTEuNCwzLjEtMi41LDUuNC0zLjNjMi4yLTAuOCw1LjEtMS4zLDguNy0xLjNoNTMuNmMwLjYsMCwxLjIsMCwxLjcsMFY4NC4zaC02MC4xCgljLTYuMSwwLTExLjMsMC45LTE1LjYsMi42Yy00LjIsMS43LTcuNiw0LTEwLjMsNi45Yy0yLjYsMi45LTQuNiw2LjItNS43LDEwYy0xLjIsMy44LTEuOCw3LjctMS44LDExLjhzMC42LDguMSwxLjgsMTEuOAoJYzEuMiwzLjcsMy4xLDcsNS43LDkuOGMyLjYsMi44LDYuMSw1LDEwLjMsNi43YzQuMiwxLjcsOS40LDIuNSwxNS42LDIuNWg2MC4xdi0xNi4xYy0wLjUsMC0xLjEsMC0xLjcsMGgtNTMuNgoJYy0zLjUsMC02LjUtMC40LTguNy0xLjJjLTIuMi0wLjgtNC0xLjktNS40LTMuMmMtMS4zLTEuMy0yLjItMi45LTIuNy00LjdjLTAuNS0xLjgtMC43LTMuNy0wLjctNS42czAuMy0zLjgsMC43LTUuNgoJQzQyNS4yLDEwOCw0MjYuMSwxMDYuNCw0MjcuNSwxMDUuMUw0MjcuNSwxMDUuMXoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTYwMi4xLDEwMy43Yy0xLjItMy44LTMuMi03LjEtNS45LTEwYy0yLjctMi44LTYuMi01LjItMTAuNC02LjljLTQuMy0xLjctOS40LTIuNi0xNS40LTIuNmgtMzAuOAoJYy02LjEsMC0xMS4zLDAuOS0xNS42LDIuNmMtNC4yLDEuNy03LjYsNC0xMC4zLDYuOGMtMi43LDIuOS00LjYsNi4yLTUuOCwxMGMtMS4yLDMuOC0xLjgsNy43LTEuOCwxMS44czAuNiw4LjEsMS44LDExLjgKCWMxLjIsMy43LDMuMSw3LDUuOCw5LjhjMi42LDIuOCw2LjEsNS4xLDEwLjMsNi43YzQuMiwxLjcsOS40LDIuNSwxNS42LDIuNWgzMC44YzYsMCwxMS4yLTAuOCwxNS40LTIuNWM0LjItMS43LDcuNy0zLjksMTAuNC02LjgKCWMyLjctMi44LDQuNy02LjEsNS45LTkuOWMxLjItMy43LDEuOS03LjcsMS45LTExLjdTNjAzLjMsMTA3LjUsNjAyLjEsMTAzLjdMNjAyLjEsMTAzLjd6IE01ODIuNCwxMjFjLTAuNiwxLjgtMS41LDMuNC0yLjgsNC43CglzLTMuMSwyLjUtNS40LDMuM2MtMi4zLDAuOC01LjIsMS4yLTguNiwxLjJoLTIxLjNjLTMuNiwwLTYuNS0wLjQtOC43LTEuMnMtNC0xLjktNS4zLTMuM3MtMi4yLTMtMi43LTQuN2MtMC41LTEuOC0wLjctMy43LTAuNy01LjYKCXMwLjItMy44LDAuNy01LjZjMC41LTEuOCwxLjQtMy40LDIuNy00LjhjMS4zLTEuNCwzLjEtMi41LDUuMy0zLjNjMi4yLTAuOCw1LjEtMS4yLDguNy0xLjJoMjEuM2MzLjUsMCw2LjMsMC40LDguNiwxLjMKCWMyLjMsMC44LDQuMSwxLjksNS40LDMuM2MxLjMsMS40LDIuMiwzLDIuOCw0LjdjMC41LDEuOCwwLjgsMy43LDAuOCw1LjZTNTgzLDExOS4yLDU4Mi40LDEyMXoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTYxMS4yLDg1LjJ2MTYuNGgzMi45djQ0aDIwLjd2LTQzLjloMzIuOFY4NS4yQzY5Ny42LDg1LjIsNjExLjIsODUuMiw2MTEuMiw4NS4yeiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNzg4LjEsMTAxLjVWODUuMmgtODR2NjAuM2g4NHYtMTYuNGgtNjMuM3YtNmg1OHYtMTUuNWgtNTh2LTZMNzg4LjEsMTAxLjVMNzg4LjEsMTAxLjV6Ii8+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik00OTkuMywxODUuM2MtMS4yLTMuOC0zLjItNy4xLTUuOS05LjljLTIuNy0yLjktNi4yLTUuMi0xMC40LTYuOWMtNC4zLTEuNy05LjQtMi42LTE1LjQtMi42aC0zMC45CgljLTYuMSwwLTExLjMsMC44LTE1LjYsMi41Yy00LjIsMS43LTcuNiw0LTEwLjMsNi45Yy0yLjYsMi45LTQuNSw2LjItNS43LDkuOWMtMS4yLDMuOC0xLjgsNy43LTEuOCwxMS45czAuNiw4LjEsMS44LDExLjgKCWMxLjIsMy43LDMuMSw3LDUuNyw5LjhzNi4xLDUuMSwxMC4zLDYuN2M0LjIsMS43LDkuNCwyLjUsMTUuNiwyLjVoMzAuOWM2LDAsMTEuMi0wLjgsMTUuNC0yLjVjNC4yLTEuNyw3LjctMy45LDEwLjQtNi44CgljMi43LTIuOSw0LjctNi4xLDUuOS05LjljMS4yLTMuNywxLjktNy42LDEuOS0xMS43UzUwMC41LDE4OS4xLDQ5OS4zLDE4NS4zTDQ5OS4zLDE4NS4zeiBNNDc5LjYsMjAyLjZjLTAuNiwxLjgtMS41LDMuNC0yLjgsNC43CgljLTEuMywxLjQtMy4xLDIuNS01LjQsMy4zYy0yLjMsMC44LTUuMiwxLjItOC42LDEuMmgtMjEuM2MtMy42LDAtNi41LTAuNC04LjctMS4yYy0yLjItMC44LTQtMS45LTUuNC0zLjNjLTEuMy0xLjQtMi4yLTMtMi43LTQuNwoJYy0wLjUtMS44LTAuNy0zLjYtMC43LTUuNnMwLjItMy44LDAuNy01LjZzMS40LTMuNCwyLjctNC44YzEuMy0xLjQsMy4xLTIuNSw1LjQtMy4zczUuMS0xLjIsOC43LTEuMmgyMS4zYzMuNSwwLDYuMywwLjQsOC42LDEuMwoJczQuMSwxLjksNS40LDMuM3MyLjIsMywyLjgsNC43YzAuNSwxLjgsMC44LDMuNiwwLjgsNS42UzQ4MC4yLDIwMC44LDQ3OS42LDIwMi42eiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNTgwLjksMTY2Ljh2MzEuMWMwLDEuOS0wLjMsMy44LTAuOCw1LjVjLTAuNSwxLjctMS41LDMuMi0yLjgsNC40cy0zLjEsMi4yLTUuNCwzYy0yLjMsMC43LTUuMiwxLjEtOC42LDEuMQoJaC0xNi42Yy0zLjYsMC02LjUtMC40LTguNy0xLjFjLTIuMi0wLjctNC0xLjctNS4zLTNzLTIuMi0yLjgtMi43LTQuNGMtMC41LTEuNy0wLjctMy41LTAuNy01LjV2LTMxLjFoLTIwLjd2MzEuMgoJYzAsNC4xLDAuNiw4LDEuOCwxMS43czMuMSw2LjgsNS43LDkuNWMyLjYsMi43LDYuMSw0LjgsMTAuMyw2LjRjNC4yLDEuNiw5LjQsMi40LDE1LjYsMi40SDU2OGM2LDAsMTEuMi0wLjgsMTUuNC0yLjQKCWM0LjItMS42LDcuNy0zLjcsMTAuNC02LjVjMi43LTIuNyw0LjctNS45LDUuOS05LjZjMS4yLTMuNiwxLjktNy41LDEuOS0xMS42di0zMS4yTDU4MC45LDE2Ni44TDU4MC45LDE2Ni44eiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNjk2LjQsMTgzLjF2LTE2LjRoLTg0djYwLjNoODR2LTE2LjRINjMzdi02aDU4di0xNS41aC01OHYtNkw2OTYuNCwxODMuMUw2OTYuNCwxODMuMXoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTc4OC44LDIwMS40Yy0wLjYtMi4xLTEuOS00LjEtNC01LjljLTItMS44LTQuOS0zLjMtOC42LTQuNWMtMy43LTEuMi04LjYtMS44LTE0LjctMS44aC0yMQoJYy0zLjUsMC02LjUsMC04LjctMC4xYy0yLjIsMC00LTAuMS01LjMtMC4zYy0xLjMtMC4yLTIuMi0wLjUtMi43LTAuOWMtMC41LTAuNC0wLjctMC45LTAuNy0xLjZjMC0wLjgsMC4zLTEuNCwwLjctMS45CgljMC41LTAuNSwxLjQtMC44LDIuNy0xYzEuMy0wLjIsMy4xLTAuMyw1LjMtMC40YzIuMi0wLjEsNS4yLTAuMSw4LjctMC4xaDE3LjljMS40LDAsMjguMSwwLjEsMjkuMSwwLjJ2LTE2LjRoLTU2LjkKCWMtNi4yLDAtMTEuMSwwLjYtMTQuOCwxLjljLTMuNywxLjMtNi41LDIuOS04LjUsNC44Yy0yLDEuOS0zLjMsNC4xLTQsNi40Yy0wLjYsMi40LTAuOSw0LjYtMC45LDYuOGMwLDEuOCwwLjMsMy43LDAuOSw1LjgKCXMyLDQuMSw0LDUuOWMyLDEuOCw0LjksMy4zLDguNSw0LjVjMy43LDEuMiw4LjYsMS44LDE0LjgsMS44aDIwLjljMy41LDAsNi40LDAsOC43LDAuMWMyLjMsMCw0LjEsMC4xLDUuNCwwLjMKCWMxLjMsMC4yLDIuMiwwLjUsMi43LDAuOWMwLjUsMC40LDAuNywwLjksMC43LDEuNmMwLDAuOC0wLjIsMS40LTAuNywxLjljLTAuNSwwLjUtMS40LDAuOC0yLjcsMWMtMS4zLDAuMi0zLjEsMC40LTUuNCwwLjQKCWMtMi4zLDAtNS4yLDAtOC43LDBoLTQ3LjN2MTYuMmg1Ny4zYzYuMSwwLDExLTAuNiwxNC43LTEuOWMzLjctMS4yLDYuNS0yLjgsOC42LTQuOGMyLTEuOSwzLjMtNC4xLDQtNi40YzAuNi0yLjQsMS00LjYsMS02LjgKCUM3ODkuOCwyMDUuNCw3ODkuNCwyMDMuNSw3ODguOCwyMDEuNEw3ODguOCwyMDEuNHoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTc5Mi44LDE2Ni44djE2LjRoMzIuOXY0My45aDIwLjd2LTQzLjloMzIuOHYtMTYuNEw3OTIuOCwxNjYuOEw3OTIuOCwxNjYuOHoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTU1NS4xLDY1bC0yNi4xLDMuMnYxMS4ybDUuMy0wLjZsMjEuMS0yLjVsMjAuNCwyLjVsNS4xLDAuNlY2OC4yTDU1NS4xLDY1TDU1NS4xLDY1eiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNDEwLjEsMjc0LjhoLTYuOXYtMTkuMmg2LjljMi44LDAsNS4xLDAuOSw2LjgsMi42czIuNiw0LjEsMi42LDdzLTAuOSw1LjMtMi42LDcKCUM0MTUuMiwyNzQsNDEyLjksMjc0LjgsNDEwLjEsMjc0LjhMNDEwLjEsMjc0Ljh6IE00MDcsMjcxLjNoM2MxLjcsMCwzLjEtMC41LDQuMS0xLjZjMS4xLTEsMS42LTIuNiwxLjYtNC41cy0wLjUtMy41LTEuNi00LjYKCWMtMS4xLTEuMS0yLjUtMS42LTQuMS0xLjZoLTNMNDA3LDI3MS4zTDQwNywyNzEuM3oiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTQyMS43LDI2NS4yYzAtMywxLTUuNCwyLjktNy4zYzEuOS0xLjgsNC4yLTIuOCw3LTIuOHM1LDAuOSw3LDIuOGMxLjksMS44LDIuOSw0LjMsMi45LDcuM3MtMSw1LjQtMi45LDcuMgoJcy00LjMsMi44LTcsMi44cy01LTAuOS03LTIuOFM0MjEuNywyNjguMiw0MjEuNywyNjUuMnogTTQyNy40LDI2MC41Yy0xLjIsMS4xLTEuOCwyLjctMS44LDQuN3MwLjYsMy42LDEuOCw0LjcKCWMxLjIsMS4xLDIuNiwxLjcsNC4yLDEuN3MzLTAuNSw0LjItMS43YzEuMi0xLjEsMS44LTIuNywxLjgtNC43cy0wLjYtMy42LTEuOC00LjdjLTEuMi0xLjEtMi42LTEuNy00LjItMS43CglTNDI4LjYsMjU5LjQsNDI3LjQsMjYwLjV6Ii8+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik00NjEuMSwyNzQuOGgtMy45bC04LjctMTMuNnYxMy42aC0zLjd2LTE5LjJoNC43bDgsMTIuN3YtMTIuN2gzLjdWMjc0Ljh6Ii8+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik00ODEuOCwyNzQuOGgtMy45bC04LjctMTMuNnYxMy42aC0zLjd2LTE5LjJoNC43bDgsMTIuN3YtMTIuN2gzLjdWMjc0Ljh6Ii8+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik00ODUuMSwyNjUuMmMwLTMsMS01LjQsMi45LTcuM2MxLjktMS44LDQuMi0yLjgsNy0yLjhzNSwwLjksNywyLjhjMS45LDEuOCwyLjksNC4zLDIuOSw3LjNzLTEsNS40LTIuOSw3LjIKCXMtNC4zLDIuOC03LDIuOHMtNS0wLjktNy0yLjhTNDg1LjEsMjY4LjIsNDg1LjEsMjY1LjJ6IE00OTAuOCwyNjAuNWMtMS4yLDEuMS0xLjgsMi43LTEuOCw0LjdzMC42LDMuNiwxLjgsNC43CgljMS4yLDEuMSwyLjYsMS43LDQuMiwxLjdzMy0wLjUsNC4yLTEuN2MxLjItMS4xLDEuOC0yLjcsMS44LTQuN3MtMC42LTMuNi0xLjgtNC43Yy0xLjItMS4xLTIuNi0xLjctNC4yLTEuNwoJUzQ5MS45LDI1OS40LDQ5MC44LDI2MC41eiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNTI0LjUsMjc0LjhoLTMuOWwtOC43LTEzLjZ2MTMuNmgtMy43di0xOS4yaDQuN2w4LDEyLjd2LTEyLjdoMy43VjI3NC44eiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNTQxLjgsMjYwLjJsLTMuNCwxYy0wLjEtMC43LTAuNS0xLjMtMS0xLjljLTAuNi0wLjYtMS40LTAuOC0yLjUtMC44Yy0wLjksMC0xLjYsMC4yLTIuMiwwLjdzLTAuOCwxLTAuOCwxLjcKCWMwLDEuMiwwLjcsMS45LDIuMSwyLjJsMi43LDAuNWMxLjcsMC4zLDMsMSw0LDJzMS40LDIuMiwxLjQsMy42YzAsMS42LTAuNiwzLTEuOSw0LjJjLTEuMywxLjItMi45LDEuOC01LDEuOAoJYy0xLjIsMC0yLjMtMC4yLTMuMy0wLjVjLTEtMC40LTEuOC0wLjgtMi40LTEuNWMtMC42LTAuNi0xLjEtMS4yLTEuNC0xLjljLTAuMy0wLjctMC41LTEuNC0wLjYtMi4xbDMuNS0wLjljMC4xLDEsMC41LDEuOSwxLjIsMi42CgljMC43LDAuNywxLjcsMSwzLDFjMSwwLDEuNy0wLjIsMi4zLTAuNnMwLjgtMSwwLjgtMS43YzAtMC42LTAuMi0xLTAuNi0xLjVzLTEtMC43LTEuNy0wLjhsLTIuNy0wLjVjLTEuNS0wLjMtMi44LTEtMy43LTEuOQoJYy0wLjktMS0xLjMtMi4xLTEuMy0zLjZjMC0xLjcsMC43LTMuMSwyLTQuM3MyLjktMS43LDQuNy0xLjdjMS4xLDAsMi4xLDAuMSwzLDAuNWMwLjksMC4zLDEuNiwwLjcsMi4xLDEuMmMwLjUsMC41LDAuOSwxLDEuMiwxLjYKCUM1NDEuNCwyNTksNTQxLjYsMjU5LjYsNTQxLjgsMjYwLjJMNTQxLjgsMjYwLjJ6Ii8+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik01NTguNywyNzQuOGgtNi44di0xOS4yaDYuOWMyLjgsMCw1LjEsMC45LDYuOCwyLjZzMi42LDQuMSwyLjYsN3MtMC45LDUuMy0yLjcsNwoJQzU2My44LDI3NCw1NjEuNSwyNzQuOCw1NTguNywyNzQuOEw1NTguNywyNzQuOHogTTU1NS42LDI3MS4zaDNjMS43LDAsMy4xLTAuNSw0LjEtMS42YzEuMS0xLDEuNi0yLjYsMS42LTQuNXMtMC41LTMuNS0xLjYtNC42CgljLTEuMS0xLjEtMi41LTEuNi00LjEtMS42aC0zTDU1NS42LDI3MS4zTDU1NS42LDI3MS4zeiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNTc4LjcsMjc1LjJjLTIuMSwwLTMuOS0wLjYtNS4zLTEuOXMtMi4xLTMtMi4xLTUuM3YtMTIuNGgzLjd2MTIuMWMwLDEuMiwwLjMsMi4yLDEsMi45YzAuNiwwLjcsMS41LDEsMi43LDEKCXMyLTAuMywyLjctMXMxLTEuNiwxLTIuOXYtMTIuMWgzLjdWMjY4YzAsMi4zLTAuNyw0LTIuMSw1LjNDNTgyLjYsMjc0LjYsNTgwLjgsMjc1LjIsNTc4LjcsMjc1LjJMNTc4LjcsMjc1LjJ6Ii8+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik02MDkuOCwyNjAuMmwtMy40LDFjLTAuMS0wLjctMC41LTEuMy0xLTEuOWMtMC42LTAuNi0xLjQtMC44LTIuNS0wLjhjLTAuOSwwLTEuNiwwLjItMi4yLDAuN3MtMC44LDEtMC44LDEuNwoJYzAsMS4yLDAuNywxLjksMi4xLDIuMmwyLjcsMC41YzEuNywwLjMsMywxLDQsMnMxLjQsMi4yLDEuNCwzLjZjMCwxLjYtMC42LDMtMS45LDQuMmMtMS4zLDEuMi0yLjksMS44LTUsMS44CgljLTEuMiwwLTIuMy0wLjItMy4zLTAuNWMtMS0wLjQtMS44LTAuOC0yLjQtMS41Yy0wLjYtMC42LTEuMS0xLjItMS40LTEuOWMtMC4zLTAuNy0wLjUtMS40LTAuNi0yLjFsMy41LTAuOWMwLjEsMSwwLjUsMS45LDEuMiwyLjYKCWMwLjcsMC43LDEuNywxLDMsMWMxLDAsMS43LTAuMiwyLjMtMC42czAuOC0xLDAuOC0xLjdjMC0wLjYtMC4yLTEtMC42LTEuNXMtMS0wLjctMS43LTAuOGwtMi43LTAuNWMtMS41LTAuMy0yLjgtMS0zLjctMS45CgljLTAuOS0xLTEuMy0yLjEtMS4zLTMuNmMwLTEuNywwLjctMy4xLDItNC4zczIuOS0xLjcsNC43LTEuN2MxLjEsMCwyLjEsMC4xLDMsMC41YzAuOSwwLjMsMS42LDAuNywyLjEsMS4yYzAuNSwwLjUsMC45LDEsMS4yLDEuNgoJQzYwOS41LDI1OSw2MDkuNywyNTkuNiw2MDkuOCwyNjAuMkw2MDkuOCwyNjAuMnoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTYyNS4zLDI3NC44aC0xMnYtMTkuMmgxMnYzLjVINjE3djQuNGg3LjV2My4zSDYxN3Y0LjRoOC4zVjI3NC44eiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNjQ1LjQsMjc0LjhoLTMuOWwtOC43LTEzLjZ2MTMuNkg2Mjl2LTE5LjJoNC43bDgsMTIuN3YtMTIuN2gzLjdWMjc0Ljh6Ii8+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik02NjIuNywyNjAuMmwtMy40LDFjLTAuMS0wLjctMC41LTEuMy0xLTEuOWMtMC42LTAuNi0xLjQtMC44LTIuNS0wLjhjLTAuOSwwLTEuNiwwLjItMi4yLDAuN3MtMC44LDEtMC44LDEuNwoJYzAsMS4yLDAuNywxLjksMi4xLDIuMmwyLjcsMC41YzEuNywwLjMsMywxLDQsMnMxLjQsMi4yLDEuNCwzLjZjMCwxLjYtMC42LDMtMS45LDQuMmMtMS4zLDEuMi0yLjksMS44LTUsMS44CgljLTEuMiwwLTIuMy0wLjItMy4zLTAuNWMtMS0wLjQtMS44LTAuOC0yLjQtMS41Yy0wLjYtMC42LTEuMS0xLjItMS40LTEuOWMtMC4zLTAuNy0wLjUtMS40LTAuNi0yLjFsMy41LTAuOWMwLjEsMSwwLjUsMS45LDEuMiwyLjYKCWMwLjcsMC43LDEuNywxLDMsMWMxLDAsMS43LTAuMiwyLjMtMC42czAuOC0xLDAuOC0xLjdjMC0wLjYtMC4yLTEtMC42LTEuNXMtMS0wLjctMS43LTAuOGwtMi43LTAuNWMtMS41LTAuMy0yLjgtMS0zLjctMS45CgljLTAuOS0xLTEuMy0yLjEtMS4zLTMuNmMwLTEuNywwLjctMy4xLDItNC4zczIuOS0xLjcsNC43LTEuN2MxLjEsMCwyLjEsMC4xLDMsMC41YzAuOSwwLjMsMS42LDAuNywyLjEsMS4yYzAuNSwwLjUsMC45LDEsMS4yLDEuNgoJQzY2Mi40LDI1OSw2NjIuNiwyNTkuNiw2NjIuNywyNjAuMkw2NjIuNywyNjAuMnoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTY4NS45LDI3NC44bC0xLjYtNC40aC03LjhsLTEuNiw0LjRoLTRsNy40LTE5LjJoNC4zbDcuMywxOS4ySDY4NS45TDY4NS45LDI3NC44eiBNNjgwLjQsMjU5LjhsLTIuNyw3LjNoNS4zCglMNjgwLjQsMjU5LjhMNjgwLjQsMjU5Ljh6Ii8+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik02OTksMjc1LjJjLTIuMSwwLTMuOS0wLjYtNS4zLTEuOXMtMi4xLTMtMi4xLTUuM3YtMTIuNGgzLjd2MTIuMWMwLDEuMiwwLjMsMi4yLDEsMi45czEuNSwxLDIuNywxczItMC4zLDIuNy0xCglzMS0xLjYsMS0yLjl2LTEyLjFoMy43VjI2OGMwLDIuMy0wLjcsNC0yLjEsNS4zQzcwMi45LDI3NC42LDcwMS4xLDI3NS4yLDY5OSwyNzUuMkw2OTksMjc1LjJ6Ii8+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik03MjUuOSwyNTUuNmwtNi4zLDkuNmw2LjMsOS42aC00LjVsLTQuMS02LjZsLTQuMiw2LjZoLTQuNGw2LjMtOS42bC02LjMtOS42aDQuNWw0LjEsNi42bDQuMi02LjZMNzI1LjksMjU1LjYKCUw3MjUuOSwyNTUuNnoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTc0Ny4zLDI3NC44aC0xMnYtMTkuMmgxMnYzLjVINzM5djQuNGg3LjV2My4zSDczOXY0LjRoOC4zVjI3NC44eiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNzcyLjUsMjc0LjhoLTMuN3YtMTMuNWwtNS41LDEzLjVoLTMuMWwtNS41LTEzLjR2MTMuNGgtMy42di0xOS4yaDQuOWw1LjgsMTMuOWw1LjYtMTMuOWg1LjFMNzcyLjUsMjc0LjgKCUw3NzIuNSwyNzQuOHoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTc3NS43LDI2NS4yYzAtMywxLTUuNCwyLjktNy4zYzEuOS0xLjgsNC4yLTIuOCw3LTIuOHM1LDAuOSw3LDIuOGMxLjksMS44LDIuOSw0LjMsMi45LDcuM3MtMSw1LjQtMi45LDcuMgoJYy0xLjksMS44LTQuMywyLjgtNywyLjhzLTUtMC45LTctMi44Uzc3NS43LDI2OC4yLDc3NS43LDI2NS4yeiBNNzgxLjQsMjYwLjVjLTEuMiwxLjEtMS44LDIuNy0xLjgsNC43czAuNiwzLjYsMS44LDQuNwoJYzEuMiwxLjEsMi42LDEuNyw0LjIsMS43czMtMC41LDQuMi0xLjdjMS4yLTEuMSwxLjgtMi43LDEuOC00LjdzLTAuNi0zLjYtMS44LTQuN2MtMS4yLTEuMS0yLjYtMS43LTQuMi0xLjcKCVM3ODIuNiwyNTkuNCw3ODEuNCwyNjAuNXoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTgxMi4zLDI1OS4yaC02LjF2MTUuNmgtMy44di0xNS42aC02LjF2LTMuNmgxNS45TDgxMi4zLDI1OS4yTDgxMi4zLDI1OS4yeiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNODE4LjgsMjc0LjhIODE1di0xOS4yaDMuOFYyNzQuOHoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTgyMiwyNjUuMmMwLTMsMS01LjQsMi45LTcuM2MxLjktMS44LDQuMi0yLjgsNy0yLjhzNSwwLjksNywyLjhjMS45LDEuOCwyLjksNC4zLDIuOSw3LjNzLTEsNS40LTIuOSw3LjIKCXMtNC4zLDIuOC03LDIuOHMtNS0wLjktNy0yLjhTODIyLDI2OC4yLDgyMiwyNjUuMnogTTgyNy43LDI2MC41Yy0xLjIsMS4xLTEuOCwyLjctMS44LDQuN3MwLjYsMy42LDEuOCw0LjdjMS4yLDEuMSwyLjYsMS43LDQuMiwxLjcKCXMzLTAuNSw0LjItMS43YzEuMi0xLjEsMS44LTIuNywxLjgtNC43cy0wLjYtMy42LTEuOC00LjdjLTEuMi0xLjEtMi42LTEuNy00LjItMS43UzgyOC44LDI1OS40LDgyNy43LDI2MC41eiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNODYxLjQsMjc0LjhoLTMuOWwtOC43LTEzLjZ2MTMuNkg4NDV2LTE5LjJoNC43bDgsMTIuN3YtMTIuN2gzLjdWMjc0Ljh6Ii8+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik04NzguNywyNjAuMmwtMy40LDFjLTAuMS0wLjctMC41LTEuMy0xLTEuOWMtMC42LTAuNi0xLjQtMC44LTIuNS0wLjhjLTAuOSwwLTEuNiwwLjItMi4yLDAuN3MtMC44LDEtMC44LDEuNwoJYzAsMS4yLDAuNywxLjksMi4xLDIuMmwyLjcsMC41YzEuNywwLjMsMywxLDQsMnMxLjQsMi4yLDEuNCwzLjZjMCwxLjYtMC42LDMtMS45LDQuMmMtMS4zLDEuMi0yLjksMS44LTUsMS44CgljLTEuMiwwLTIuMy0wLjItMy4zLTAuNWMtMS0wLjQtMS44LTAuOC0yLjQtMS41Yy0wLjYtMC42LTEuMS0xLjItMS40LTEuOWMtMC4zLTAuNy0wLjUtMS40LTAuNi0yLjFsMy41LTAuOWMwLjEsMSwwLjUsMS45LDEuMiwyLjYKCWMwLjcsMC43LDEuNywxLDMsMWMxLDAsMS43LTAuMiwyLjMtMC42czAuOC0xLDAuOC0xLjdjMC0wLjYtMC4yLTEtMC42LTEuNXMtMS0wLjctMS43LTAuOGwtMi43LTAuNWMtMS41LTAuMy0yLjgtMS0zLjctMS45CgljLTAuOS0xLTEuMy0yLjEtMS4zLTMuNmMwLTEuNywwLjctMy4xLDItNC4zczIuOS0xLjcsNC43LTEuN2MxLjEsMCwyLjEsMC4xLDMsMC41YzAuOSwwLjMsMS42LDAuNywyLjEsMS4yYzAuNSwwLjUsMC45LDEsMS4yLDEuNgoJQzg3OC4zLDI1OSw4NzguNSwyNTkuNiw4NzguNywyNjAuMkw4NzguNywyNjAuMnoiLz4KPHBvbHlnb24gY2xhc3M9InN0MCIgcG9pbnRzPSI3NDYuNCwyNDkuOCA3NDIuNSwyNTMuMyA3MzkuMiwyNTMuMyA3NDIsMjQ5LjggIi8+CjxwYXRoIGNsYXNzPSJzdDEiIGQ9Ik03MzUuMywyNTUuNmgxMnYxOS4yaC0xMnYtMy41aDguM3YtNC40aC03LjV2LTMuM2g3LjV2LTQuNGgtOC4zVjI1NS42TDczNS4zLDI1NS42eiIvPgo8cG9seWdvbiBjbGFzcz0ic3QxIiBwb2ludHM9IjczNi4yLDI4MC41IDc0MC4yLDI3Ny4xIDc0My41LDI3Ny4xIDc0MC43LDI4MC41ICIvPgo8L3N2Zz4K"); }
+header h1{ font-family:"Barlow Condensed","Arial Narrow",sans-serif; font-weight:700; font-size:clamp(2rem,4.5vw,2.9rem); line-height:1.05; margin:0 0 6px; letter-spacing:-.01em; }
+header p{ margin:0; color:var(--muted); max-width:75ch; }
+.grid{ display:grid; grid-template-columns:minmax(0,1.15fr) minmax(0,1fr); gap:22px; margin-top:24px; align-items:start; }
+@media (max-width:960px){ .grid{ grid-template-columns:minmax(0,1fr); } }
+.panel{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:20px; }
+.zone{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:18px 20px; margin-bottom:16px; }
+.zone-h{ display:flex; justify-content:space-between; align-items:center; gap:10px; margin-bottom:6px; }
+.zone-h h2{ font-family:"Barlow Condensed","Arial Narrow",sans-serif; font-weight:600; font-size:1.3rem; margin:0; }
+.del{ font:inherit; font-size:.88rem; color:var(--muted); background:none; border:1px solid var(--line); border-radius:6px; padding:4px 10px; cursor:pointer; }
+.del:focus-visible, .btn:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.row{ display:flex; flex-wrap:wrap; gap:12px 20px; margin-top:12px; align-items:flex-end; }
+.f label, .f .lab{ display:block; font-size:.88rem; color:var(--muted); margin-bottom:4px; }
+input[type=text], select{ max-width:100%; font:inherit; color:var(--ink); background:var(--field); border:1px solid var(--line); border-radius:6px; padding:9px 10px; }
+input[type=text]{ font-variant-numeric:tabular-nums; text-align:right; width:7.5em; }
+select.wide{ width:24em; }
+input:focus-visible, select:focus-visible{ outline:3px solid var(--focus); outline-offset:1px; }
+.check{ display:flex; gap:8px; align-items:center; cursor:pointer; font-size:.95rem; padding-bottom:9px; }
+.check input{ width:18px; height:18px; accent-color:var(--ink); }
+.seg{ display:inline-grid; grid-template-columns:repeat(3,auto); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+.seg label{ position:relative; padding:8px 14px; cursor:pointer; font-weight:500; font-size:.93rem; border-left:1px solid var(--line); }
+.seg label:first-child{ border-left:0; }
+.seg input{ position:absolute; opacity:0; inset:0; cursor:pointer; }
+.seg label:has(input:checked){ background:var(--ink); color:var(--card); }
+.seg label:has(input:focus-visible){ outline:3px solid var(--focus); outline-offset:-3px; }
+.res{ margin-top:16px; padding:12px 14px; border-radius:8px; background:var(--out); }
+.res .big{ font-family:"Barlow Condensed","Arial Narrow",sans-serif; font-weight:700; font-size:1.8rem; line-height:1.1; font-variant-numeric:tabular-nums; }
+.res .lbl{ color:var(--muted); font-size:.88rem; }
+.res ul{ margin:6px 0 0; padding-left:18px; }
+.res .rule{ margin-top:8px; font-size:.85rem; color:var(--muted); }
+.res .ko{ color:var(--bad); font-weight:600; }
+.hint{ font-size:.86rem; color:var(--muted); margin:6px 0 0; }
+.btn{ font:inherit; font-weight:600; color:var(--card); background:var(--ink); border:0; border-radius:6px; padding:10px 16px; cursor:pointer; }
+.side{ position:sticky; top:16px; }
+@media (max-width:960px){ .side{ position:static; } }
+.heads{ display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:14px; padding-bottom:14px; border-bottom:2px solid var(--ink); }
+.hd .lbl{ display:block; color:var(--muted); font-size:.9rem; margin-bottom:4px; }
+.hd .big{ font-family:"Barlow Condensed","Arial Narrow",sans-serif; font-weight:700; font-size:clamp(1.7rem,3.6vw,2.4rem); line-height:1; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.scroll{ overflow-x:auto; margin-top:12px; }
+table{ width:100%; border-collapse:collapse; font-variant-numeric:tabular-nums; min-width:380px; }
+th, td{ padding:7px 6px; text-align:left; border-bottom:1px solid var(--line); vertical-align:top; }
+thead th{ font-weight:600; color:var(--muted); font-size:.85rem; }
+td.n{ text-align:right; white-space:nowrap; }
+h3{ font-size:1rem; margin:18px 0 6px; }
+.notes{ display:grid; gap:8px; }
+.note{ font-size:.9rem; padding:9px 12px; border-radius:6px; background:var(--field); border-left:3px solid var(--line); }
+.note.warn{ background:var(--warn-bg); border-left-color:var(--accent); }
+.note.info{ border-left-color:var(--ink); font-weight:500; }
+footer{ margin-top:28px; color:var(--muted); font-size:.85rem; max-width:95ch; }
+.hidden{ display:none !important; }
+.export{ margin-top:18px; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+.btn[disabled]{ opacity:.6; cursor:progress; }
+input.lib{ text-align:left; width:16em; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo" role="img" aria-label="Côte Ouest"></div>
+    <h1>Jauge et dégagements ERP</h1>
+    <p>Pour chaque espace, choisissez l’activité, puis indiquez ce que vous connaissez : la surface, la jauge ou les sorties existantes. L’outil applique le règlement de sécurité dans l’ordre : dispositions spéciales, puis particulières, puis générales.</p>
+  </header>
+
+  <div class="grid">
+    <section aria-label="Espaces">
+      <div class="row" style="margin:0 0 16px">
+        <div class="f"><label for="projet">Projet ou lieu (facultatif)</label><input type="text" id="projet" class="lib"></div>
+      </div>
+      <div id="zones"></div>
+      <div class="row" style="margin-top:0">
+        <div class="f"><label for="perso">Personnel présent (pour la catégorie)</label><input type="text" id="perso" inputmode="numeric" value="0"></div>
+      </div>
+    </section>
+
+    <section class="panel side" aria-live="polite" aria-label="Synthèse">
+      <div class="heads">
+        <div class="hd"><span class="lbl">Effectif public</span><span class="big" id="sE">–</span></div>
+        <div class="hd"><span class="lbl">Classement</span><span class="big" id="sC">–</span></div>
+      </div>
+      <h3>Effectif et dégagements par niveau</h3>
+      <div class="scroll"><table>
+        <thead><tr><th>Niveau</th><th class="n">Effectif</th><th>Dégagements requis</th></tr></thead>
+        <tbody id="levels"></tbody>
+      </table></div>
+      <h3>Points de vigilance</h3>
+      <div class="notes" id="notes"></div>
+      <div class="export"><button type="button" id="pdfBtn" class="btn">Exporter en PDF</button><span id="pdfMsg" class="hint" style="margin:0"></span></div>
+    </section>
+  </div>
+
+  <footer>
+    <p>Sources : règlement de sécurité contre les risques d’incendie et de panique dans les ERP (arrêté du 25 juin 1980 modifié) : CO 36, CO 38, CO 40, CO 41 ; PE 11 (petits établissements) ; CTS 2, CTS 10, CTS 37 ; PA 2, PA 7 ; modes de calcul de l’effectif des types L, N, P, T, X. Outil d’aide au dimensionnement : il ne remplace ni l’analyse d’un chargé de sécurité ni l’avis de la commission de sécurité.</p>
+  </footer>
+</div>
+
+<script>
+/* ===== Données réglementaires ===== */
+const TYPES = {
+  CTS: 'CTS – Chapiteau, tente, structure',
+  PA: 'PA – Établissement de plein air',
+  ED: 'Ensemble démontable (tribune, plateforme)',
+  L: 'L – Spectacle, réunion, conférence',
+  N: 'N – Restaurant, débit de boissons',
+  T: 'T – Exposition, salon',
+  X: 'X – Établissement sportif couvert',
+  P: 'P – Salle de danse, salle de jeux'
+};
+// unit : m2 | places | ml ; k : personnes par unité ; grp : seuil de 5e catégorie
+const USAGES = [
+  { id: 'l_conf', t: 'L', label: 'Conférence, réunion, audition : places assises', unit: 'places', k: 1, grp: 'Lr' },
+  { id: 'l_reu', t: 'L', label: 'Réunion sans spectacle, salle polyvalente : 1 pers./m²', unit: 'm2', k: 1, grp: 'Lr' },
+  { id: 'l_multi', t: 'L', label: 'Salle multimédia : 1 pers./2 m² au minimum', unit: 'm2', k: 0.5, grp: 'Lr' },
+  { id: 'l_spa', t: 'L', label: 'Spectacle, projection : places assises', unit: 'places', k: 1, grp: 'Ls' },
+  { id: 'l_spb', t: 'L', label: 'Spectacle : bancs, 1 pers./0,50 m', unit: 'ml', k: 2, grp: 'Ls' },
+  { id: 'l_deb', t: 'L', label: 'Spectacle, concert debout : 3 pers./m²', unit: 'm2', k: 3, grp: 'Ls' },
+  { id: 'l_cab', t: 'L', label: 'Cabaret : 4 pers./3 m²', unit: 'm2', k: 4 / 3, grp: 'Ls' },
+  { id: 'n_decl', t: 'N', label: 'Restauration assise : places déclarées (1 pers./2 m² au plus)', unit: 'places', k: 1, grp: 'N' },
+  { id: 'n_ass', t: 'N', label: 'Restauration assise sans déclaration : 1 pers./m²', unit: 'm2', k: 1, grp: 'N' },
+  { id: 'n_deb', t: 'N', label: 'Restauration debout, bar : 2 pers./m²', unit: 'm2', k: 2, grp: 'N' },
+  { id: 'n_file', t: 'N', label: 'File d’attente : 3 pers./m²', unit: 'm2', k: 3, grp: 'N' },
+  { id: 't_temp', t: 'T', label: 'Exposition, foire, salon temporaire : 1 pers./m²', unit: 'm2', k: 1, grp: 'T' },
+  { id: 't_perm', t: 'T', label: 'Exposition permanente : 1 pers./9 m²', unit: 'm2', k: 1 / 9, grp: 'T' },
+  { id: 'x_sans', t: 'X', label: 'Aire sportive sans spectateurs : 1 pers./4 m²', unit: 'm2', k: 0.25, grp: 'X' },
+  { id: 'x_avec', t: 'X', label: 'Aire sportive avec spectateurs : 1 pers./8 m² (ajoutez les spectateurs)', unit: 'm2', k: 0.125, grp: 'X' },
+  { id: 'x_poly', t: 'X', label: 'Salle polyvalente à dominante sportive : 1 pers./m² d’aire', unit: 'm2', k: 1, grp: 'X' },
+  { id: 'x_sa', t: 'X', label: 'Spectateurs : places assises', unit: 'places', k: 1, grp: 'X' },
+  { id: 'x_sb', t: 'X', label: 'Spectateurs : bancs, 1 pers./0,50 m', unit: 'ml', k: 2, grp: 'X' },
+  { id: 'x_pro', t: 'X', label: 'Spectateurs : promenoir, 5 pers./m linéaire', unit: 'ml', k: 5, grp: 'X' },
+  { id: 'p_danse', t: 'P', label: 'Salle de danse ou de jeux : 4 pers./3 m²', unit: 'm2', k: 4 / 3, grp: 'P' },
+  { id: 'pa_deb', t: 'PA', label: 'Spectateurs debout : 3 pers./m² (hors dégagements)', unit: 'm2', k: 3, grp: 'PA' },
+  { id: 'pa_lin', t: 'PA', label: 'Spectateurs debout en linéaire : 5 pers./m', unit: 'ml', k: 5, grp: 'PA' },
+  { id: 'pa_sa', t: 'PA', label: 'Spectateurs : places assises', unit: 'places', k: 1, grp: 'PA' },
+  { id: 'pa_sb', t: 'PA', label: 'Spectateurs : bancs ou gradins, 1 pers./0,50 m', unit: 'ml', k: 2, grp: 'PA' },
+  { id: 'ed_sa', t: 'ED', label: 'Places assises sur sièges', unit: 'places', k: 1, grp: 'ED' },
+  { id: 'ed_sb', t: 'ED', label: 'Bancs ou gradins : 2 pers./m linéaire', unit: 'ml', k: 2, grp: 'ED' },
+  { id: 'ed_deb', t: 'ED', label: 'Places debout : 3 pers./m² hors dégagements', unit: 'm2', k: 3, grp: 'ED' }
+];
+const usagesFor = t => t === 'CTS' ? USAGES.filter(u => ['L', 'N', 'T', 'X', 'P'].includes(u.t)) : USAGES.filter(u => u.t === t);
+const U = id => USAGES.find(u => u.id === id);
+// Seuils d'assujettissement (5e catégorie si l'effectif public n'atteint pas ces chiffres)
+const SEUILS = {
+  Lr: { ss: 100, et: Infinity, tot: 200, lib: 'L (réunion, conférence)' },
+  Ls: { ss: 20, et: Infinity, tot: 50, lib: 'L (spectacle, projection, cabaret)' },
+  N: { ss: 100, et: 200, tot: 200, lib: 'N' },
+  T: { ss: 100, et: 100, tot: 200, lib: 'T' },
+  X: { ss: 100, et: 100, tot: 200, lib: 'X' },
+  P: { ss: 20, et: 100, tot: 120, lib: 'P' },
+  CTS: { ss: Infinity, et: Infinity, tot: 50, lib: 'CTS' },
+  PA: { ss: Infinity, et: Infinity, tot: 301, lib: 'PA' }
+};
+const UNIT_LBL = { m2: 'Surface (m²)', places: 'Nombre de places', ml: 'Longueur (m linéaires)' };
+
+/* ===== Outils ===== */
+const $ = s => document.querySelector(s);
+const parse = s => { const v = parseFloat(String(s).replace(/[\s\u202f]/g, '').replace(',', '.')); return isNaN(v) ? 0 : v; };
+const nf = v => Math.round(v).toLocaleString('fr-FR');
+const m = v => v.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' m';
+const upW = n => n === 1 ? 0.9 : n === 2 ? 1.4 : 0.6 * n;
+const upTxt = n => `${n} UP (${m(upW(n))})`;
+function split(nb, up, per){
+  const a = Array(nb).fill(Math.max(per, Math.floor(up / nb)));
+  let s = a.reduce((x, y) => x + y, 0), i = 0;
+  while (s < up){ a[i % nb]++; s++; i++; }
+  const g = {}; a.forEach(v => g[v] = (g[v] || 0) + 1);
+  return Object.keys(g).sort((x, y) => y - x).map(v => `${g[v]} × ${upTxt(+v)}`).join(' + ');
+}
+
+/* ===== Règles de dégagements ===== */
+// c : { type, niveau, haut8, prof, is5e }
+function reqGeneral(E, c){
+  const r = { alts: [], txt: [], notes: [] };
+  if (c.is5e && E <= 300){
+    r.rule = 'PE 11 (petits établissements, 5e catégorie)';
+    if (E < 20){ Object.assign(r, { nb: 1, up: 1 }); r.txt.push('1 dégagement de 0,90 m'); }
+    else if (E <= 50){
+      Object.assign(r, { nb: 2, up: 1 });
+      r.txt.push('2 dégagements vers l’extérieur ou des locaux différents : 0,90 m + 0,60 m (ou dégagement accessoire)');
+      r.txt.push('ou 1 seul dégagement de 1,40 m donnant directement sur l’extérieur, si le public a moins de 25 m à parcourir');
+      r.alts.push({ nb: 1, up: 2, cond: 'si sortie directe sur l’extérieur et parcours de moins de 25 m' });
+      if (c.niveau === 'etage'){
+        r.txt.push(c.haut8 ? 'en étage : escalier unique de 0,90 m possible, complété par un dégagement accessoire (plancher à plus de 8 m)' : 'en étage : escalier unique de 0,90 m possible');
+        if (!c.haut8) r.alts.push({ nb: 1, up: 1, cond: 'escalier unique en étage' });
+      }
+    } else if (E <= 100){ Object.assign(r, { nb: 2, up: 2 }); r.txt.push('2 dégagements de 0,90 m', 'ou 1 dégagement de 1,40 m + 1 dégagement de 0,60 m ou accessoire'); }
+    else if (E <= 200){ Object.assign(r, { nb: 2, up: 3 }); r.txt.push('1 dégagement de 1,40 m + 1 dégagement de 0,90 m'); }
+    else { Object.assign(r, { nb: 2, up: 4, per: 2 }); r.txt.push('2 dégagements de 1,40 m'); }
+    return r;
+  }
+  r.rule = 'CO 38 (dispositions générales)';
+  let Ec = E;
+  if (c.niveau === 'ss' && E > 100){
+    const mj = Math.ceil(Math.max(c.prof - 2, 0) - 1e-9);
+    Ec = Math.ceil(Math.ceil(E / 100) * 100 * (1 + 0.1 * mj) - 1e-9);
+    r.maj = `Sous-sol de plus de 100 personnes : effectif arrondi à la centaine supérieure${mj ? ` et majoré de ${mj * 10} % pour ${mj} m au-delà de 2 m de profondeur` : ''}, soit ${nf(Ec)} personnes pour le calcul (CO 40).`;
+    r.rule = 'CO 38 et CO 40 (dispositions générales)';
+  }
+  r.Ec = Ec;
+  if (Ec < 20){ Object.assign(r, { nb: 1, up: 1 }); r.txt.push('1 dégagement de 1 UP (0,90 m)'); }
+  else if (Ec <= 50){
+    Object.assign(r, { nb: 2, up: 1 });
+    r.txt.push('2 dégagements vers l’extérieur ou des locaux différents non en cul-de-sac, dont 1 de 1 UP (0,90 m) au moins ; le second peut être accessoire (CO 41)');
+    if (c.niveau === 'etage'){
+      r.txt.push(c.haut8 ? 'en étage : 1 escalier de 1 UP, complété par un dégagement accessoire (plancher à plus de 8 m)' : 'en étage : 1 escalier de 1 UP (0,90 m) suffit');
+      if (!c.haut8) r.alts.push({ nb: 1, up: 1, cond: 'escalier unique en étage' });
+    }
+  } else if (Ec <= 100){ Object.assign(r, { nb: 2, up: 2 }); r.txt.push('2 dégagements de 1 UP (0,90 m)', 'ou 1 dégagement de 2 UP (1,40 m) + 1 dégagement accessoire'); }
+  else if (Ec <= 500){
+    const up = Math.ceil(Ec / 100) + 1, per = Ec > 200 ? 2 : 1;
+    Object.assign(r, { nb: 2, up, per });
+    r.txt.push(`2 dégagements totalisant ${up} UP, par exemple ${split(2, up, per)}`);
+  } else {
+    const nb = 2 + Math.ceil((Ec - 500) / 500), up = Math.ceil(Ec / 100);
+    Object.assign(r, { nb, up, per: 2 });
+    r.txt.push(`${nb} dégagements totalisant ${up} UP, par exemple ${split(nb, Math.max(up, 2 * nb), 2)}`);
+  }
+  return r;
+}
+
+function reqFor(E, c){
+  if (!(E > 0)) return null;
+  let r;
+  if (c.type === 'PA' && !c.is5e){
+    const up = Math.ceil(E / 300), nb = E <= 500 ? 2 : E <= 3000 ? 3 : 3 + Math.ceil((E - 3000) / 3000);
+    r = { nb, up: Math.max(up, nb), alts: [], notes: [], rule: 'PA 7 (dispositions spéciales, plein air)' };
+    r.txt = [`${nb} sorties de l’établissement totalisant ${r.up} UP (1 UP pour 300 personnes), par exemple ${split(nb, r.up, 1)}`];
+    r.chain = 'Dispositions spéciales du type PA (livre IV) : elles s’appliquent en priorité.';
+    return r;
+  }
+  if (c.type === 'ED'){
+    const div = c.pleinAir ? 150 : 100;
+    let nb = E <= 19 ? 1 : E <= 500 ? 2 : 3;
+    const per = E > 100 ? 2 : 1;
+    const up = Math.max(Math.ceil(E / div), nb * per);
+    if (up > 8 * nb) nb = Math.ceil(up / 8);
+    r = { nb, up, per, alts: [], notes: [], rule: 'arrêté du 25 juillet 2022, articles 5 et 16 (structures provisoires et démontables)' };
+    r.txt = [`${nb} dégagement${nb > 1 ? 's' : ''} totalisant ${up} UP (1 UP pour ${div} personnes ${c.pleinAir ? 'en plein air' : 'en lieu clos et couvert'}), par exemple ${split(nb, up, per)}`,
+      E > 100 ? 'chaque issue comporte de 2 à 8 UP' : 'chaque issue comporte au moins 1 UP (0,90 m)'];
+    r.chain = 'Texte spécifique aux ensembles démontables : il s’applique à la tribune ou à la plateforme elle-même. Les dégagements du site ou de la salle qui l’accueille relèvent du règlement ERP, effectif de la tribune compris.';
+    return r;
+  }
+  if (c.type === 'CTS'){
+    r = { alts: [], notes: [], txt: [] };
+    if (E < 50){ Object.assign(r, { nb: 2, up: 2, rule: 'CTS 37 (petits CTS de moins de 50 personnes)' }); r.txt.push('2 sorties de 0,80 m au moins'); }
+    else if (E <= 200){ Object.assign(r, { nb: 2, up: 4, per: 2, rule: 'CTS 10 (dispositions spéciales)' }); r.txt.push('2 sorties de 1,40 m chacune'); }
+    else if (E <= 500){ Object.assign(r, { nb: 2, up: 6, per: 3, rule: 'CTS 10 (dispositions spéciales)' }); r.txt.push('2 sorties de 1,80 m chacune'); }
+    else {
+      const k = Math.ceil((E - 500) / 500), w = 3.6 + 3 * k;
+      Object.assign(r, { nb: 2 + k, up: Math.round(w / 0.6), rule: 'CTS 10 (dispositions spéciales)' });
+      r.txt.push(`${2 + k} sorties : 2 de 1,80 m + ${k} sortie(s) complémentaire(s), largeur cumulée de ${m(w)}`);
+    }
+    if (c.ctsEtage){
+      r.txt.push('structure à étage : à chaque niveau, 2 sorties de 1,80 m reliées par des circulations internes de 1,80 m' + (E > 500 ? `, plus ${Math.ceil((E - 500) / 300)} issue(s) complémentaire(s) d’au moins 1,80 m (1 par fraction de 300 personnes au-delà de 500 sur le niveau)` : ''));
+    }
+    r.chain = 'Dispositions spéciales du type CTS (livre IV) : elles s’appliquent en priorité. L’effectif est calculé selon l’activité exercée sous la toile (CTS 2).';
+    return r;
+  }
+  r = reqGeneral(E, c);
+  if (c.type === 'PA') r.chain = 'Dispositions spéciales PA : établissement de plein air de 300 personnes au plus (5e catégorie), donc règles des petits établissements.';
+  else if (c.type === 'CTS') r.chain = 'Dispositions spéciales CTS : rien de prévu sous 20 personnes, donc règle générale des petits établissements.';
+  else r.chain = `Dispositions spéciales : sans objet. Dispositions particulières du type ${c.type} : pas de règle propre au nombre de dégagements. Application des dispositions ${c.is5e ? 'des petits établissements (livre III)' : 'générales (livre II)'}.`;
+  return r;
+}
+
+function satisfies(r, nb, up){
+  if (!r) return true;
+  const main = nb >= r.nb && up >= r.up && up >= (r.per || 1) * r.nb;
+  return main || r.alts.some(a => nb >= a.nb && up >= a.up);
+}
+
+/* ===== État ===== */
+let zones = [{ type: 'CTS', usage: 'l_deb', niveau: 'rdc', etage: 1, haut8: false, prof: 3, pleinAir: true, ctsEtage: false, mode: 'surf', q: '400', jauge: '', nb: '', up: '' }];
+const newZone = () => ({ type: 'L', usage: 'l_reu', niveau: 'rdc', etage: 1, haut8: false, prof: 3, pleinAir: true, ctsEtage: false, mode: 'surf', q: '', jauge: '', nb: '', up: '' });
+const isExt = t => t === 'PA' || t === 'CTS' || t === 'ED';
+
+function renderZones(){
+  $('#zones').innerHTML = zones.map((z, i) => {
+    const us = usagesFor(z.type), u = U(z.usage), noLevel = isExt(z.type);
+    return `<article class="zone" data-i="${i}">
+      <div class="zone-h"><h2>Espace ${i + 1}</h2>${zones.length > 1 ? `<button type="button" class="del" data-act="del" data-i="${i}" aria-label="Supprimer l’espace ${i + 1}">Supprimer</button>` : ''}</div>
+      <div class="row" style="margin-top:4px">
+        <div class="f"><label for="ty${i}">Type d’établissement</label><select id="ty${i}" data-k="type" data-i="${i}">${Object.entries(TYPES).map(([k, v]) => `<option value="${k}" ${k === z.type ? 'selected' : ''}>${v}</option>`).join('')}</select></div>
+        <div class="f"><label for="us${i}">${z.type === 'CTS' ? 'Activité sous la toile' : 'Activité, mode de calcul'}</label><select class="wide" id="us${i}" data-k="usage" data-i="${i}">${us.map(x => `<option value="${x.id}" ${x.id === z.usage ? 'selected' : ''}>${z.type === 'CTS' ? x.t + ' : ' : ''}${x.label}</option>`).join('')}</select></div>
+      </div>
+      <div class="row ${noLevel ? 'hidden' : ''}">
+        <div class="f"><label for="nv${i}">Niveau</label><select id="nv${i}" data-k="niveau" data-i="${i}">
+          <option value="rdc" ${z.niveau === 'rdc' ? 'selected' : ''}>Rez-de-chaussée</option>
+          <option value="etage" ${z.niveau === 'etage' ? 'selected' : ''}>Étage</option>
+          <option value="ss" ${z.niveau === 'ss' ? 'selected' : ''}>Sous-sol</option></select></div>
+        ${z.niveau === 'etage' ? `<div class="f"><label for="et${i}">N° d’étage</label><input type="text" id="et${i}" inputmode="numeric" data-k="etage" data-i="${i}" value="${z.etage}" style="width:4em"></div>
+          <label class="check"><input type="checkbox" data-k="haut8" data-i="${i}" ${z.haut8 ? 'checked' : ''}>Plancher à plus de 8 m du sol</label>` : ''}
+        ${z.niveau === 'ss' ? `<div class="f"><label for="pr${i}">Profondeur sous le niveau des sorties (m)</label><input type="text" id="pr${i}" inputmode="decimal" data-k="prof" data-i="${i}" value="${z.prof}" style="width:5em"></div>` : ''}
+      </div>
+      ${z.type === 'ED' ? `<div class="row"><label class="check"><input type="checkbox" data-k="pleinAir" data-i="${i}" ${z.pleinAir ? 'checked' : ''}>Installé en plein air (1 UP pour 150 personnes ; décoché : lieu clos et couvert, 1 UP pour 100)</label></div>` : ''}
+      ${z.type === 'CTS' ? `<div class="row"><label class="check"><input type="checkbox" data-k="ctsEtage" data-i="${i}" ${z.ctsEtage ? 'checked' : ''}>Structure à étage (saisissez un espace par niveau)</label></div>` : ''}
+      <div class="row">
+        <div class="f"><span class="lab">Je connais</span><div class="seg" role="radiogroup" aria-label="Donnée connue pour l’espace ${i + 1}">
+          ${[['surf', u.unit === 'm2' ? 'La surface' : u.unit === 'places' ? 'Les places' : 'Le linéaire'], ['jauge', 'La jauge'], ['sorties', 'Les sorties']].map(([v, l]) => `<label><input type="radio" name="md${i}" value="${v}" data-k="mode" data-i="${i}" ${z.mode === v ? 'checked' : ''}>${l}</label>`).join('')}
+        </div></div>
+      </div>
+      <div class="row">
+        ${z.mode !== 'jauge' ? `<div class="f"><label for="q${i}">${UNIT_LBL[u.unit]}${z.mode === 'sorties' ? ' (facultatif)' : ''}</label><input type="text" id="q${i}" inputmode="decimal" data-k="q" data-i="${i}" value="${z.q}"></div>` : ''}
+        ${z.mode === 'jauge' ? `<div class="f"><label for="j${i}">Jauge souhaitée (personnes)</label><input type="text" id="j${i}" inputmode="numeric" data-k="jauge" data-i="${i}" value="${z.jauge}"></div>` : ''}
+        ${z.mode === 'sorties' ? `<div class="f"><label for="nb${i}">Nombre de dégagements</label><input type="text" id="nb${i}" inputmode="numeric" data-k="nb" data-i="${i}" value="${z.nb}" style="width:5em"></div>
+          <div class="f"><label for="up${i}">Total d’unités de passage (UP)</label><input type="text" id="up${i}" inputmode="numeric" data-k="up" data-i="${i}" value="${z.up}" style="width:5em"></div>` : ''}
+      </div>
+      ${z.mode === 'sorties' ? '<p class="hint">1 UP = 0,90 m ; 2 UP = 1,40 m ; au-delà, 0,60 m par UP (une sortie de 1,80 m = 3 UP). Comptez aussi les dégagements accessoires dans le nombre.</p>' : ''}
+      <div class="res" id="res${i}"></div>
+    </article>`;
+  }).join('');
+}
+
+/* ===== Calcul ===== */
+const lvlKey = z => isExt(z.type) ? 'ext' : z.niveau === 'etage' ? 'e' + Math.max(1, Math.round(parse(z.etage))) : z.niveau;
+const lvlName = k => k === 'rdc' ? 'Rez-de-chaussée' : k === 'ss' ? 'Sous-sol' : k === 'ext' ? 'Plein air, CTS, démontables' : `Étage ${k.slice(1)}`;
+const ctxOf = (z, is5e) => ({ type: z.type, niveau: isExt(z.type) ? 'rdc' : z.niveau, haut8: z.haut8, prof: parse(z.prof), is5e, pleinAir: z.pleinAir, ctsEtage: z.ctsEtage });
+
+function classify(eff){
+  const tot = eff.reduce((a, e) => a + e.E, 0);
+  const ss = eff.filter(e => lvlKey(e.z) === 'ss').reduce((a, e) => a + e.E, 0);
+  const et = eff.filter(e => lvlKey(e.z).startsWith('e') && lvlKey(e.z) !== 'ext').reduce((a, e) => a + e.E, 0);
+  const grps = [...new Set(eff.filter(e => e.E > 0 && e.z.type !== 'ED').map(e => U(e.z.usage).t === 'PA' ? 'PA' : e.z.type === 'CTS' ? 'CTS' : U(e.z.usage).grp))];
+  if (!grps.length) return { tot, ss, et, is5e: true, grps };
+  const min = k => Math.min(...grps.map(g => SEUILS[g][k]));
+  return { tot, ss, et, grps, is5e: tot < min('tot') && ss < min('ss') && et < min('et') };
+}
+
+function compute(){
+  // 1. effectifs connus (surface ou jauge)
+  const eff = zones.map(z => {
+    const u = U(z.usage);
+    const theo = z.mode !== 'jauge' && parse(z.q) > 0 ? Math.floor(parse(z.q) * u.k + 1e-9) : null;
+    return { z, u, theo, E: z.mode === 'surf' ? (theo || 0) : z.mode === 'jauge' ? Math.max(0, Math.floor(parse(z.jauge))) : 0 };
+  });
+  // 2. jauges maximales d'après les sorties
+  eff.forEach((e, i) => {
+    if (e.z.mode !== 'sorties') return;
+    const nb = Math.floor(parse(e.z.nb)), up = Math.floor(parse(e.z.up));
+    e.nb = nb; e.up = up;
+    if (nb < 1 || up < 1){ e.E = e.theo || 0; e.maxOut = null; return; }
+    let E = 0;
+    for (let x = 1; x <= 200000; x++){
+      e.E = x;
+      const cl = classify(eff);
+      if (!satisfies(reqFor(x, ctxOf(e.z, cl.is5e)), nb, up)) break;
+      E = x;
+    }
+    e.maxOut = E; e.E = e.theo != null ? Math.min(E, e.theo) : E;
+  });
+  const cl = classify(eff);
+
+  // Résultat par espace
+  eff.forEach((e, i) => {
+    const box = $('#res' + i); if (!box) return;
+    const c = ctxOf(e.z, cl.is5e), r = reqFor(e.E, c);
+    let h = '';
+    if (e.z.mode === 'sorties'){
+      if (e.maxOut == null){ box.innerHTML = '<span class="lbl">Saisissez le nombre de dégagements et le total d’UP.</span>'; return; }
+      h += `<div class="lbl">Jauge maximale permise par ${e.nb} dégagement(s) et ${e.up} UP</div><div class="big">${nf(e.maxOut)} personnes</div>`;
+      if (e.theo != null) h += `<div class="lbl" style="margin-top:6px">Effectif théorique d’après ${e.u.unit === 'm2' ? 'la surface' : e.u.unit === 'places' ? 'les places' : 'le linéaire'} : ${nf(e.theo)} personnes. <b>Jauge retenue : ${nf(e.E)} personnes</b> (${e.E < e.maxOut ? 'limitée par l’activité' : 'limitée par les sorties'}).</div>`;
+    } else {
+      if (!e.E){ box.innerHTML = `<span class="lbl">Saisissez ${e.z.mode === 'jauge' ? 'la jauge' : UNIT_LBL[e.u.unit].toLowerCase()}.</span>`; return; }
+      h += `<div class="lbl">${e.z.mode === 'jauge' ? 'Jauge saisie' : 'Effectif théorique'}</div><div class="big">${nf(e.E)} personnes</div>`;
+      if (e.z.mode === 'jauge' && e.theo == null){ /* rien */ }
+    }
+    if (r){
+      h += `<div class="lbl" style="margin-top:10px">Dégagements requis${e.z.mode === 'sorties' ? ` pour ${nf(e.E)} personnes` : ''}</div><ul>${r.txt.map(t => `<li>${t}</li>`).join('')}</ul>`;
+      if (r.maj) h += `<div class="rule">${r.maj}</div>`;
+      h += `<div class="rule">Règle appliquée : ${r.rule}. ${r.chain}</div>`;
+    }
+    box.innerHTML = h;
+  });
+
+  // Synthèse
+  const perso = Math.max(0, Math.floor(parse($('#perso').value)));
+  $('#sE').textContent = nf(cl.tot);
+  const types = [...new Set(eff.filter(e => e.E > 0).map(e => e.z.type))];
+  let cat = '–';
+  if (cl.tot > 0){
+    const T = cl.tot + perso;
+    cat = cl.is5e ? '5e' : T > 1500 ? '1re' : T > 700 ? '2e' : T > 300 ? '3e' : '4e';
+    const erp = types.filter(t => t !== 'ED');
+    cat = erp.length ? `${erp.join(', ')} ${cat} cat.` : 'Démontable';
+  }
+  $('#sC').textContent = cat;
+
+  // Par niveau (bâtiments) et plein air / CTS
+  const lv = {};
+  eff.forEach(e => { if (e.E > 0){ const k = lvlKey(e.z); (lv[k] = lv[k] || { E: 0, z: [] }); lv[k].E += e.E; lv[k].z.push(e.z); } });
+  const order = k => k === 'ext' ? -1 : k === 'ss' ? 0 : k === 'rdc' ? 1 : 1 + parseInt(k.slice(1));
+  $('#levels').innerHTML = Object.keys(lv).sort((a, b) => order(a) - order(b)).map(k => {
+    const L = lv[k];
+    let txt;
+    if (k === 'ext'){ txt = 'Voir chaque espace (règles spéciales CTS, PA ou démontables, calculées par structure ou enceinte).'; }
+    else {
+      const c = { type: 'L', niveau: k === 'ss' ? 'ss' : k === 'rdc' ? 'rdc' : 'etage', haut8: L.z.some(z => z.haut8), prof: Math.max(...L.z.map(z => parse(z.prof))), is5e: cl.is5e };
+      const r = reqGeneral(L.E, c);
+      txt = r.txt[0] + (r.maj ? ` (effectif de calcul ${nf(r.Ec)}, CO 40)` : '') + ` ; ${r.rule.split(' (')[0]}`;
+    }
+    return `<tr><td>${lvlName(k)}</td><td class="n">${nf(L.E)}</td><td>${txt}</td></tr>`;
+  }).join('') || '<tr><td colspan="3">Aucun effectif saisi.</td></tr>';
+
+  // Points de vigilance (adaptés aux espaces saisis et aux règles appliquées)
+  const n = [];
+  const act = eff.filter(e => e.E > 0);
+  const has = t => act.some(e => e.z.type === t);
+  const hasU = id => act.some(e => e.z.usage === id);
+  const tagged = act.map(e => {
+    const r = reqFor(e.E, ctxOf(e.z, cl.is5e)) || { rule: '' };
+    const rl = r.rule;
+    const tag = rl.startsWith('PE') ? 'PE' : rl.startsWith('CO') ? 'CO' : rl.startsWith('CTS 37') ? 'CTS37' : rl.startsWith('CTS') ? 'CTS10' : rl.startsWith('PA') ? 'PA7' : 'ED';
+    return { e, r, tag, Ec: r.Ec || e.E };
+  });
+  const anyTag = t => tagged.some(x => x.tag === t);
+  const bld = x => !isExt(x.e.z.type);
+
+  n.push(['info', 'Calcul donné à titre indicatif : il doit être validé par un chargé de sécurité (SSIAP 3) ou par un bureau d’études avant toute communication de jauge.']);
+  n.push(['info', 'Un lieu peut avoir une jauge propre, fixée par son autorisation d’ouverture ou ses conditions d’exploitation. Consultez son cahier des charges et le dernier avis de la commission de sécurité : la jauge retenue ne peut pas dépasser celle qui y figure.']);
+
+  if (act.length){
+    if (cl.grps.length){
+      if (cl.is5e) n.push(['', `5e catégorie : l’effectif public reste sous le seuil le plus bas des activités présentes (${cl.grps.map(g => SEUILS[g].lib).join(', ')}). Avec plusieurs activités, c’est le seuil le plus bas qui s’applique.`]);
+      else n.push(['', `Catégorie déterminée sur l’effectif public${perso ? ' et le personnel' : ''} : ${nf(cl.tot + perso)} personnes.`]);
+    }
+    n.push(['warn', 'Personnel : il s’ajoute à l’effectif servant au calcul des dégagements, sauf s’il dispose de dégagements indépendants.']);
+  }
+
+  if (tagged.some(x => ['CO', 'PE', 'PA7', 'ED'].includes(x.tag))) {
+    const multi = tagged.some(x => (x.r.nb || 0) >= 2);
+    n.push(['', 'Largeurs (CO 36) : 1 UP = 0,90 m, 2 UP = 1,40 m, puis 0,60 m par UP.' + (multi ? ' Pour compter comme deux dégagements distincts, les sorties doivent être éloignées de plus de 5 m et judicieusement réparties.' : '')]);
+  }
+  if (tagged.some(x => x.tag === 'CO' && x.Ec > 200)) n.push(['warn', 'Plus de 200 personnes : aucun dégagement normal ne doit faire moins de 2 UP (1,40 m), pour éviter l’effet d’entonnoir.']);
+  if (tagged.some(x => bld(x) && x.e.E > 50)) n.push(['', 'Plus de 50 personnes : les portes donnant sur l’extérieur s’ouvrent dans le sens de l’évacuation, par une manœuvre simple.']);
+  if (anyTag('PE')) n.push(['', 'Petits établissements (PE 11) : pas de cul-de-sac de plus de 10 m. En aménagement d’un bâtiment existant, la largeur de 0,90 m peut être ramenée à 0,80 m.']);
+  if (tagged.some(x => x.tag === 'CO' && x.e.E >= 20 && x.e.E <= 100) || act.some(e => e.z.mode === 'sorties' && e.maxOut >= 20 && e.maxOut <= 100)) n.push(['', 'Dégagements accessoires (CO 41) : entre 20 et 100 personnes, l’un des dégagements peut être accessoire (sortie, escalier, passerelle, balcon…).']);
+
+  const ss = tagged.filter(x => bld(x) && x.e.z.niveau === 'ss');
+  if (ss.length){
+    if (ss.some(x => x.r.maj)) n.push(['warn', 'Sous-sol de plus de 100 personnes : les dégagements sont calculés sur l’effectif arrondi à la centaine supérieure et majoré de 10 % par mètre (ou fraction) au-delà de 2 m de profondeur (CO 40).']);
+    n.push(['', 'Sous-sol : l’implantation de locaux publics y est limitée en profondeur (CO 39), à vérifier au cas par cas.']);
+    if (ss.some(x => U(x.e.z.usage).grp === 'Ls')) n.push(['warn', 'Spectacle en sous-sol : le seuil de la 5e catégorie tombe à 20 personnes.']);
+  }
+  const et = tagged.filter(x => bld(x) && x.e.z.niveau === 'etage');
+  if (et.length){
+    n.push(['', 'Étages : les escaliers desservant un niveau offrent au moins les dégagements requis pour l’effectif de ce niveau.']);
+    if (et.some(x => x.e.z.haut8 && x.e.E >= 20 && x.e.E <= 50)) n.push(['warn', 'Plancher à plus de 8 m : un escalier unique doit être complété par un dégagement accessoire (balcon, terrasse, passerelle…).']);
+  }
+
+  if (anyTag('CTS10')) n.push(['', 'CTS : sans porte, l’encadrement des sorties est matérialisé à l’intérieur et à l’extérieur par une bande verte (ou contrastée) de 0,20 m au moins ; les pans de toile peuvent être baissés mais jamais condamnés. Les circulations menant aux sorties ont la même largeur que celles-ci.']);
+  if (anyTag('CTS37')) n.push(['', 'CTS de moins de 50 personnes (CTS 37) : 2 sorties de 0,80 m, enveloppe en catégorie M2 au moins.']);
+  if (act.some(e => e.z.type === 'CTS' && e.z.ctsEtage)) n.push(['warn', 'Structure à étage : chaque niveau dispose de 2 sorties de 1,80 m reliées par des circulations internes de même largeur ; au-delà de 500 personnes sur un niveau, ajouter une issue d’au moins 1,80 m par fraction de 300 personnes. Faites vérifier la stabilité par un organisme agréé.']);
+
+  if (anyTag('PA7')) n.push(['', 'Plein air (PA 7) : sorties de l’enceinte à 1 UP pour 300 personnes ; escaliers de gradins et vomitoires à 1 UP pour 150 personnes ; sorties de tribunes et vomitoires de 2 à 8 UP.']);
+  if (has('PA') && !anyTag('PA7')) n.push(['', 'Plein air de 300 personnes au plus : établissement de 5e catégorie, règles des petits établissements.']);
+
+  const ed = tagged.filter(x => x.tag === 'ED');
+  if (ed.length){
+    n.push(['', 'Ensembles démontables : la capacité inclut le personnel déclaré présent sur la structure ; tolérance de 5 % admise sur les largeurs.' + (ed.some(x => x.e.E > 100) ? ' Un promenoir de plus de 2 UP est assimilé à une plateforme ; sans promenoir, une tribune de plus de 10 rangs a ses dégagements dans le prolongement des emmarchements ou par vomitoires à contre-pente.' : '')]);
+    n.push(['', 'Ensembles démontables : protection contre les chutes dès 0,25 m de hauteur, garde-corps à partir de 1 m (article 20).']);
+    if (!cl.grps.length) n.push(['', 'Un ensemble démontable n’a pas de catégorie propre : le classement dépend du site ou de la salle qui l’accueille, effectif de la tribune compris.']);
+  }
+
+  if (hasU('n_decl')) n.push(['', 'Restauration assise déclarée : places retenues dans la limite d’une personne pour 2 m² ; la déclaration précise la capacité par niveau.']);
+  if (has('T') || act.some(e => e.z.type === 'CTS' && U(e.z.usage).t === 'T')) n.push(['', 'Salons et expositions : un tiers au moins de la surface des salles reste réservé à la circulation du public (T 18).']);
+  if (hasU('x_avec') && !act.some(e => ['x_sa', 'x_sb', 'x_pro'].includes(e.z.usage))) n.push(['warn', 'Sport avec spectateurs : ajoutez un espace « spectateurs » (places, bancs ou promenoir) pour les tribunes.']);
+  if (hasU('l_deb') || hasU('pa_deb') || hasU('ed_deb')) n.push(['', 'Public debout : la surface retenue exclut les dégagements, la scène, la régie et les aménagements fixes.']);
+  $('#notes').innerHTML = n.map(([c, t]) => `<div class="note ${c}">${t}</div>`).join('');
+}
+
+/* ===== Événements ===== */
+const structural = ['type', 'usage', 'niveau', 'mode', 'haut8'];
+function onField(ev){
+  const el = ev.target, k = el.dataset.k; if (!k) return;
+  const z = zones[+el.dataset.i];
+  if (el.type === 'checkbox') z[k] = el.checked; else z[k] = el.value;
+  if (k === 'type'){ z.usage = usagesFor(z.type)[0].id; }
+  if (structural.includes(k) && ev.type === 'change'){ renderZones(); }
+  compute();
+}
+$('#zones').addEventListener('input', ev => { if (!structural.includes(ev.target.dataset.k)) onField(ev); });
+$('#zones').addEventListener('change', ev => { if (structural.includes(ev.target.dataset.k)) onField(ev); });
+$('#zones').addEventListener('click', ev => {
+  const b = ev.target.closest('[data-act=del]'); if (!b) return;
+  zones.splice(+b.dataset.i, 1); renderZones(); compute();
+});
+$('#perso').addEventListener('input', compute);
+
+/* ===== Export PDF ===== */
+const dlPromise = (window.claude && typeof window.claude.use === 'function') ? window.claude.use('downloads').catch(() => null) : Promise.resolve(null);
+const pt = s => String(s).replace(/[\u202f\u00a0]/g, ' ').replace(/\u2212/g, '-').replace(/\s+/g, ' ').trim();
+async function logoPng(){
+  try {
+    const v = getComputedStyle(document.querySelector('.logo')).getPropertyValue('--logo');
+    const mm = v.match(/base64,([A-Za-z0-9+/=]+)/); if (!mm) return null;
+    const svg = atob(mm[1]).replace(/#FFFFFF/gi, '#17243A');
+    const img = new Image(); img.src = 'data:image/svg+xml;base64,' + btoa(svg); await img.decode();
+    const c = document.createElement('canvas'); c.width = 948; c.height = 367;
+    c.getContext('2d').drawImage(img, 0, 0, 948, 367);
+    return c.toDataURL('image/png');
+  } catch (e) { return null; }
+}
+async function exportPdf(){
+  const btn = $('#pdfBtn'), msg = $('#pdfMsg');
+  if (!window.jspdf){ msg.textContent = 'Le module PDF n’a pas pu se charger.'; return; }
+  btn.disabled = true; msg.textContent = 'Préparation du PDF…';
+  try {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF({ unit: 'mm', format: 'a4' });
+    const W = 210, M = 16, ink = [23, 36, 58], mut = [94, 107, 125], line = [213, 219, 227];
+    let y = 14;
+    const page = need => { if (y + need > 278){ doc.addPage(); y = 18; } };
+    const para = (text, size, style, color, indent = 0, gap = 1.5) => {
+      doc.setFont('helvetica', style); doc.setFontSize(size); doc.setTextColor(...color);
+      const l = doc.splitTextToSize(pt(text), W - 2 * M - indent); const h = size * 0.42;
+      page(l.length * h); doc.text(l, M + indent, y); y += l.length * h + gap;
+    };
+    const logo = await logoPng();
+    if (logo) doc.addImage(logo, 'PNG', M - 5, y - 3, 47, 18.2);
+    const today = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+    doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(...mut);
+    doc.text(pt(`Édité le ${today}`), W - M, y + 5, { align: 'right' });
+    y += 24;
+    para('Jauge et dégagements ERP', 18, 'bold', ink, 0, 2);
+    const proj = $('#projet').value.trim();
+    if (proj) para(`Projet : ${proj}`, 10.5, 'normal', ink, 0, 2);
+    y += 2;
+    const heads = [['Effectif public', $('#sE').textContent], ['Classement', $('#sC').textContent]];
+    heads.forEach(([l, v], i) => {
+      const x = M + i * 70;
+      doc.setFont('helvetica', 'normal'); doc.setFontSize(9); doc.setTextColor(...mut); doc.text(pt(l), x, y);
+      doc.setFont('helvetica', 'bold'); doc.setFontSize(17); doc.setTextColor(...ink); doc.text(pt(v), x, y + 8);
+    });
+    y += 12; doc.setDrawColor(...ink); doc.setLineWidth(0.5); doc.line(M, y, W - M, y); y += 8;
+
+    document.querySelectorAll('.zone').forEach((art, i) => {
+      const z = zones[i], u = U(z.usage);
+      page(30);
+      para(`Espace ${i + 1} : ${TYPES[z.type]}`, 12, 'bold', ink, 0, 1);
+      const niv = isExt(z.type) ? '' : z.niveau === 'rdc' ? ' ; rez-de-chaussée' : z.niveau === 'ss' ? ` ; sous-sol à ${z.prof} m` : ` ; étage ${z.etage}${z.haut8 ? ', plancher à plus de 8 m' : ''}`;
+      const extra = z.type === 'ED' ? (z.pleinAir ? ' ; en plein air' : ' ; en lieu clos et couvert') : z.type === 'CTS' && z.ctsEtage ? ' ; structure à étage' : '';
+      const data = z.mode === 'jauge' ? `jauge saisie ${z.jauge}` : z.mode === 'sorties' ? `${z.nb} dégagement(s), ${z.up} UP${parse(z.q) > 0 ? `, ${UNIT_LBL[u.unit].toLowerCase()} ${z.q}` : ''}` : `${UNIT_LBL[u.unit].toLowerCase()} ${z.q}`;
+      para(`${u.label}${niv}${extra}. Données : ${data}.`, 9.5, 'normal', mut, 0, 2);
+      const res = art.querySelector('.res');
+      [...res.children].forEach(el => {
+        if (el.tagName === 'UL') [...el.children].forEach(li => para('• ' + li.textContent, 10, 'normal', ink, 3, 1));
+        else if (el.classList.contains('big')) para(el.textContent, 13, 'bold', ink, 0, 1.5);
+        else if (el.classList.contains('rule')) para(el.textContent, 8.5, 'normal', mut, 0, 1.5);
+        else para(el.textContent, 9.5, 'normal', mut, 0, 1);
+      });
+      if (!res.children.length) para(res.textContent, 9.5, 'normal', mut);
+      y += 4;
+    });
+
+    page(20);
+    para('Effectif et dégagements par niveau', 12, 'bold', ink, 0, 2);
+    document.querySelectorAll('#levels tr').forEach(tr => {
+      const c = [...tr.children].map(td => pt(td.textContent));
+      if (c.length < 3){ para(c[0], 9.5, 'normal', mut); return; }
+      doc.setFontSize(9.5);
+      const l = doc.splitTextToSize(c[2], W - M - (M + 62));
+      page(l.length * 4 + 3);
+      doc.setFont('helvetica', 'bold'); doc.setTextColor(...ink); doc.text(c[0], M, y);
+      doc.setFont('helvetica', 'normal'); doc.text(c[1], M + 56, y, { align: 'right' });
+      doc.text(l, M + 62, y);
+      y += l.length * 4 + 1.5; doc.setDrawColor(...line); doc.setLineWidth(0.2); doc.line(M, y, W - M, y); y += 4;
+    });
+    y += 3;
+    para('Points de vigilance', 12, 'bold', ink, 0, 2);
+    document.querySelectorAll('#notes .note').forEach(nd => {
+      const warn = nd.classList.contains('warn'), info = nd.classList.contains('info');
+      para((warn ? '! ' : '• ') + nd.textContent, 9, warn || info ? 'bold' : 'normal', warn ? [154, 91, 0] : info ? ink : mut, 0, 2);
+    });
+
+    const nP = doc.getNumberOfPages();
+    for (let i = 1; i <= nP; i++){
+      doc.setPage(i); doc.setFont('helvetica', 'normal'); doc.setFontSize(8); doc.setTextColor(...mut);
+      doc.text(pt('Côte Ouest ; outil d’aide au dimensionnement, ne remplace pas l’avis de la commission de sécurité.'), M, 289);
+      doc.text(`${i} / ${nP}`, W - M, 289, { align: 'right' });
+    }
+    const slug = s => s.trim().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const d = new Date(), iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const filename = ['Jauge', slug(proj), iso].filter(Boolean).join('_') + '.pdf';
+    const blob = doc.output('blob');
+    const dl = await dlPromise;
+    if (dl){
+      try { await dl.save({ filename, data: blob }); msg.textContent = 'PDF enregistré.'; }
+      catch (e){ msg.textContent = e && e.code === 'declined' ? 'Enregistrement annulé.' : e && e.code === 'rate_limited' ? 'Une demande est déjà en cours, réessayez dans un instant.' : 'L’enregistrement n’est pas disponible dans cette vue.'; }
+    } else { doc.save(filename); msg.textContent = 'PDF généré.'; }
+  } catch (e){ msg.textContent = 'La génération du PDF a échoué.'; }
+  finally { btn.disabled = false; }
+}
+$('#pdfBtn').addEventListener('click', exportPdf);
+renderZones(); compute();
+</script>
+</body>
+</html>

@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Du brut au net – intermittents et régime général</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Barlow+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#EEF1F5; --card:#FFFFFF; --ink:#17243A; --muted:#5E6B7D; --line:#D5DBE3;
+  --accent:#E3A900; --accent-ink:#17243A; --good:#1F7A66; --warn:#9A5B00; --warn-bg:#FFF4D6;
+  --field:#F7F9FB; --focus:#2B6CB0;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --paper:#111924; --card:#18222F; --ink:#E6EBF1; --muted:#9AA7B8; --line:#2B3747;
+    --accent:#F2C230; --accent-ink:#111924; --good:#5CC3A6; --warn:#F2C230; --warn-bg:#2A2414;
+    --field:#121B26; --focus:#7FB2F0; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#111924; --card:#18222F; --ink:#E6EBF1; --muted:#9AA7B8; --line:#2B3747;
+  --accent:#F2C230; --accent-ink:#111924; --good:#5CC3A6; --warn:#F2C230; --warn-bg:#2A2414;
+  --field:#121B26; --focus:#7FB2F0; color-scheme: dark;
+}
+:root{ box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px); }
+html{ scroll-padding-top:env(safe-area-inset-top,0px); }
+*,*::before,*::after{ box-sizing:inherit; }
+body{ margin:0; background:var(--paper); color:var(--ink); font-family:"Barlow",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; font-size:16px; line-height:1.45; }
+.wrap{ max-width:1180px; margin:0 auto; padding:28px 20px 48px; }
+.logo{ display:block; height:64px; aspect-ratio:948.2/367; margin:0 0 10px -18px; background:var(--ink); -webkit-mask:var(--logo) no-repeat center/contain; mask:var(--logo) no-repeat center/contain; --logo:url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4KPCEtLSBHZW5lcmF0b3I6ICQkJC9HZW5lcmFsU3RyLzE5Nj1BZG9iZSBJbGx1c3RyYXRvciAyNy42LjAsIFNWRyBFeHBvcnQgUGx1Zy1JbiAuIFNWRyBWZXJzaW9uOiA2LjAwIEJ1aWxkIDApICAtLT4KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYWxxdWVfMSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgeD0iMHB4IiB5PSIwcHgiCgkgdmlld0JveD0iMCAwIDk0OC4yIDM2NyIgc3R5bGU9ImVuYWJsZS1iYWNrZ3JvdW5kOm5ldyAwIDAgOTQ4LjIgMzY3OyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+CjxzdHlsZSB0eXBlPSJ0ZXh0L2NzcyI+Cgkuc3Qwe2ZpbGw6I0ZGRkZGRjt9Cgkuc3Qxe2ZpbGw6I0ZGRkZGRjtmaWxsLW9wYWNpdHk6MDt9Cjwvc3R5bGU+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik0zMTUuNiw5MC40aC0xLjFjLTAuMiwwLTAuNCwwLTAuNywwLjFjLTEuNCwwLjItMi44LDAuNC00LjEsMC43Yy0xMi4xLDIuMi0yNC4xLDUuNy0zNi43LDEwLjlsLTAuNCwwLjIKCWMtMTEuMSw0LjYtMjIuMSw5LjgtMzMuNSwxNi4xbC0yMi40LTM0bC0xLjYsMWMtOCw1LTE2LjEsMTAuMS0yNCwxNS4xYy0xMS43LDcuNS0yMy45LDE1LjItMzYsMjIuNGMtMTMsNy44LTMwLjMsMTcuNi00OSwyNQoJYy0xMC41LDQuMi0yMy45LDcuOS0zNSw5LjhsLTEuNywwLjN2MS43Yy0wLjIsMTguNi0wLjUsOTQuMy0wLjUsOTUuMXYwLjZsMjYuNSw0MC4zbDEuMi0wLjFjMC4yLDAsMC4zLDAsMC41LTAuMWwwLjEsMAoJYzguNS0xLjMsMTctMy4zLDI1LjEtNS45YzAuNS0wLjEsNC44LTEuNiw2LTJsMC4zLTAuMWMxMy4yLTQuNywyNi45LTEwLjksNDIuOS0xOS42bDIyLjYsMzQuM2wxLjctMS4yYzItMS41LDQuMi0yLjgsNi4zLTQKCWMwLjktMC42LDEuOS0xLjIsMi44LTEuOGM1LjItMy4zLDEwLjQtNi42LDE1LjYtOS45YzExLjUtNy40LDIzLjUtMTUsMzUuNC0yMi4xYzEyLjUtNy41LDI5LjItMTcsNDcuNC0yNC40YzIuNC0xLDQuOC0xLjksNy4xLTIuOAoJYzkuNC0zLjQsMjAuMS02LjMsMjguOC03LjdsMS43LTAuM3YtOTguNUwzMTUuNiw5MC40TDMxNS42LDkwLjR6IE0xNzQuMywyMDQuMWwtNC40LDMuMWMtMTUuOCw5LjgtMzEuOCwxOS4zLTQ4LjcsMjcuMgoJYy0xMy40LDYuMy0zMC43LDEyLjItNDUuNCwxNS4yYzAuMS04LjYsMC41LTcxLjQsMC42LTg2YzIwLjQtNCw0MS40LTEyLjMsNTkuNy0yMS45YzE3LTguOSwzMy4zLTE5LjIsNDkuNS0yOS40TDIxMSw5Ni4ybDEtMC42CglsLTAuMywzNy43QzE4OS45LDE0NywxNjcuNSwxNjIsMTQ1LDE3NC42Yy05LjQsNS4zLTIwLjQsMTEtMzAuNCwxNS4zbDAsOS45YzcuNS0zLjMsMTYuNC03LjYsMjMuNS0xMS41CgljMTguOS0xMC4yLDM2LjktMjEuNyw1NC45LTMzLjNjNi4zLTQsMTkuNi0xMi40LDE5LjktMTIuN2MxMS4xLTcsMjIuMy0xMy43LDMzLjktMTkuOWMxNS45LTguNiwzMi4zLTE2LjIsNDkuOS0yMS4xCgljMy44LTEuMSw5LjQtMi41LDEzLjQtMy4ybC0wLjEsODQuOWMtMC4xLDAtMC4yLDAtMC4zLDAuMWMtMTIuOSwyLjgtMjUuNCw3LjItMzcuNSwxMi40YzAsMC0wLjEsMC0wLjEsMGMtMS42LDAuNy0zLjMsMS40LTUsMi4yCgljLTIwLjcsOS40LTQwLjEsMjEuMS01OS4zLDMzLjJjLTEwLjcsNi43LTIzLjEsMTQuMi0zMy45LDIxQzE3NC40LDIzNy43LDE3NC4zLDIwNS4xLDE3NC4zLDIwNC4xTDE3NC4zLDIwNC4xeiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNMjE1LDE4Ny44YzE4LjItMTEuMiwzNi41LTIyLjEsNTYtMzFjMC4xLTAuMSwwLjItMC4xLDAuMy0wLjF2LTEwYy0xNS4zLDYuOS0yOS45LDE1LjItNDQuMywyMy44CgljLTEuNiwwLjktMy4yLDEuOS00LjgsMi45Yy0yLjQsMS41LTQuOCwyLjktNy4yLDQuNGwwLDBjLTAuOCwwLjUtMS42LDEtMi41LDEuNWMtMC4xLDAuMS0wLjIsMC4xLTAuNCwwLjJ2MTAKCWMwLjEtMC4xLDAuMy0wLjEsMC41LTAuM0MyMTMuNCwxODguNywyMTQuMiwxODguMywyMTUsMTg3LjhMMjE1LDE4Ny44eiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNMzE1LjYsOTAuNGgtMS4xYy0wLjIsMC0wLjQsMC0wLjcsMC4xYy0xLjQsMC4yLTIuOCwwLjQtNC4xLDAuN2MtMTIuMSwyLjItMjQuMSw1LjctMzYuNywxMC45bC0wLjQsMC4yCgljLTExLjEsNC42LTIyLjEsOS44LTMzLjUsMTYuMWwtMjIuNC0zNC4xbC0xLjYsMWMtOCw1LTE2LjEsMTAuMS0yNCwxNS4xYy0xMS43LDcuNS0yMy45LDE1LjItMzYsMjIuNGMtMTMsNy44LTMwLjMsMTcuNi00OSwyNQoJYy0xMC41LDQuMi0yMy45LDcuOS0zNSw5LjhsLTEuNywwLjN2MS43Yy0wLjIsMTguNi0wLjUsOTQuMy0wLjUsOTUuMXYwLjZsMjYuNSw0MC4zbDEuMi0wLjFjMC4yLDAsMC4zLDAsMC41LTAuMWwwLjEsMAoJYzguNS0xLjMsMTctMy4zLDI1LjEtNS45YzAuNS0wLjEsNC44LTEuNiw2LTJsMC4zLTAuMWMxMy4yLTQuNywyNi45LTEwLjksNDIuOS0xOS42bDIyLjYsMzQuM2wxLjctMS4yYzItMS41LDQuMi0yLjgsNi4zLTQKCWMwLjktMC42LDEuOS0xLjIsMi44LTEuOGM1LjItMy4zLDEwLjQtNi42LDE1LjYtOS45YzExLjUtNy40LDIzLjUtMTUsMzUuNC0yMi4xYzEyLjUtNy41LDI5LjItMTcsNDcuNC0yNC40YzIuNC0xLDQuOC0xLjksNy4xLTIuOAoJYzkuNC0zLjQsMjAuMS02LjMsMjguOC03LjdsMS43LTAuM3YtOTguNUwzMTUuNiw5MC40TDMxNS42LDkwLjR6IE0xNzQuMywyMDRsLTQuNCwzLjFjLTE1LjgsOS44LTMxLjgsMTkuMy00OC43LDI3LjIKCWMtMTMuNCw2LjMtMzAuNywxMi4yLTQ1LjQsMTUuMmMwLjEtOC42LDAuNS03MS40LDAuNi04NmMyMC40LTQsNDEuNC0xMi4zLDU5LjctMjEuOWMxNy04LjksMzMuMy0xOS4yLDQ5LjUtMjkuNEwyMTEsOTYuMWwxLTAuNgoJbC0wLjMsMzcuN2MtMjEuOCwxMy43LTQ0LjIsMjguNy02Ni43LDQxLjNjLTkuNCw1LjMtMjAuNCwxMS0zMC40LDE1LjNsMCw5LjljNy41LTMuMywxNi40LTcuNiwyMy41LTExLjUKCWMxOC45LTEwLjIsMzYuOS0yMS43LDU0LjktMzMuM2M2LjMtNCwxOS42LTEyLjQsMTkuOS0xMi43YzExLjEtNywyMi4zLTEzLjcsMzMuOS0xOS45YzE1LjktOC42LDMyLjMtMTYuMiw0OS45LTIxLjEKCWMzLjgtMS4xLDkuNC0yLjUsMTMuNC0zLjJsLTAuMSw4NC45Yy0wLjEsMC0wLjIsMC0wLjMsMC4xYy0xMi45LDIuOC0yNS40LDcuMi0zNy41LDEyLjRjMCwwLTAuMSwwLTAuMSwwYy0xLjYsMC43LTMuMywxLjQtNSwyLjIKCWMtMjAuNyw5LjQtNDAuMSwyMS4xLTU5LjMsMzMuMmMtMTAuNyw2LjctMjMuMSwxNC4yLTMzLjksMjFDMTc0LjQsMjM3LjYsMTc0LjMsMjA1LjEsMTc0LjMsMjA0TDE3NC4zLDIwNHoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTIxNSwxODcuN2MxOC4yLTExLjIsMzYuNS0yMi4xLDU2LTMxYzAuMS0wLjEsMC4yLTAuMSwwLjMtMC4xdi0xMGMtMTUuMyw2LjktMjkuOSwxNS4yLTQ0LjMsMjMuOAoJYy0xLjYsMC45LTMuMiwxLjktNC44LDIuOWMtMi40LDEuNS00LjgsMi45LTcuMiw0LjRsMCwwYy0wLjgsMC41LTEuNiwxLTIuNSwxLjVjLTAuMSwwLjEtMC4yLDAuMS0wLjQsMC4ydjEwCgljMC4xLTAuMSwwLjMtMC4xLDAuNS0wLjNDMjEzLjQsMTg4LjcsMjE0LjIsMTg4LjIsMjE1LDE4Ny43eiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNDI3LjUsMTA1LjFjMS4zLTEuNCwzLjEtMi41LDUuNC0zLjNjMi4yLTAuOCw1LjEtMS4zLDguNy0xLjNoNTMuNmMwLjYsMCwxLjIsMCwxLjcsMFY4NC4zaC02MC4xCgljLTYuMSwwLTExLjMsMC45LTE1LjYsMi42Yy00LjIsMS43LTcuNiw0LTEwLjMsNi45Yy0yLjYsMi45LTQuNiw2LjItNS43LDEwYy0xLjIsMy44LTEuOCw3LjctMS44LDExLjhzMC42LDguMSwxLjgsMTEuOAoJYzEuMiwzLjcsMy4xLDcsNS43LDkuOGMyLjYsMi44LDYuMSw1LDEwLjMsNi43YzQuMiwxLjcsOS40LDIuNSwxNS42LDIuNWg2MC4xdi0xNi4xYy0wLjUsMC0xLjEsMC0xLjcsMGgtNTMuNgoJYy0zLjUsMC02LjUtMC40LTguNy0xLjJjLTIuMi0wLjgtNC0xLjktNS40LTMuMmMtMS4zLTEuMy0yLjItMi45LTIuNy00LjdjLTAuNS0xLjgtMC43LTMuNy0wLjctNS42czAuMy0zLjgsMC43LTUuNgoJQzQyNS4yLDEwOCw0MjYuMSwxMDYuNCw0MjcuNSwxMDUuMUw0MjcuNSwxMDUuMXoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTYwMi4xLDEwMy43Yy0xLjItMy44LTMuMi03LjEtNS45LTEwYy0yLjctMi44LTYuMi01LjItMTAuNC02LjljLTQuMy0xLjctOS40LTIuNi0xNS40LTIuNmgtMzAuOAoJYy02LjEsMC0xMS4zLDAuOS0xNS42LDIuNmMtNC4yLDEuNy03LjYsNC0xMC4zLDYuOGMtMi43LDIuOS00LjYsNi4yLTUuOCwxMGMtMS4yLDMuOC0xLjgsNy43LTEuOCwxMS44czAuNiw4LjEsMS44LDExLjgKCWMxLjIsMy43LDMuMSw3LDUuOCw5LjhjMi42LDIuOCw2LjEsNS4xLDEwLjMsNi43YzQuMiwxLjcsOS40LDIuNSwxNS42LDIuNWgzMC44YzYsMCwxMS4yLTAuOCwxNS40LTIuNWM0LjItMS43LDcuNy0zLjksMTAuNC02LjgKCWMyLjctMi44LDQuNy02LjEsNS45LTkuOWMxLjItMy43LDEuOS03LjcsMS45LTExLjdTNjAzLjMsMTA3LjUsNjAyLjEsMTAzLjdMNjAyLjEsMTAzLjd6IE01ODIuNCwxMjFjLTAuNiwxLjgtMS41LDMuNC0yLjgsNC43CglzLTMuMSwyLjUtNS40LDMuM2MtMi4zLDAuOC01LjIsMS4yLTguNiwxLjJoLTIxLjNjLTMuNiwwLTYuNS0wLjQtOC43LTEuMnMtNC0xLjktNS4zLTMuM3MtMi4yLTMtMi43LTQuN2MtMC41LTEuOC0wLjctMy43LTAuNy01LjYKCXMwLjItMy44LDAuNy01LjZjMC41LTEuOCwxLjQtMy40LDIuNy00LjhjMS4zLTEuNCwzLjEtMi41LDUuMy0zLjNjMi4yLTAuOCw1LjEtMS4yLDguNy0xLjJoMjEuM2MzLjUsMCw2LjMsMC40LDguNiwxLjMKCWMyLjMsMC44LDQuMSwxLjksNS40LDMuM2MxLjMsMS40LDIuMiwzLDIuOCw0LjdjMC41LDEuOCwwLjgsMy43LDAuOCw1LjZTNTgzLDExOS4yLDU4Mi40LDEyMXoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTYxMS4yLDg1LjJ2MTYuNGgzMi45djQ0aDIwLjd2LTQzLjloMzIuOFY4NS4yQzY5Ny42LDg1LjIsNjExLjIsODUuMiw2MTEuMiw4NS4yeiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNzg4LjEsMTAxLjVWODUuMmgtODR2NjAuM2g4NHYtMTYuNGgtNjMuM3YtNmg1OHYtMTUuNWgtNTh2LTZMNzg4LjEsMTAxLjVMNzg4LjEsMTAxLjV6Ii8+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik00OTkuMywxODUuM2MtMS4yLTMuOC0zLjItNy4xLTUuOS05LjljLTIuNy0yLjktNi4yLTUuMi0xMC40LTYuOWMtNC4zLTEuNy05LjQtMi42LTE1LjQtMi42aC0zMC45CgljLTYuMSwwLTExLjMsMC44LTE1LjYsMi41Yy00LjIsMS43LTcuNiw0LTEwLjMsNi45Yy0yLjYsMi45LTQuNSw2LjItNS43LDkuOWMtMS4yLDMuOC0xLjgsNy43LTEuOCwxMS45czAuNiw4LjEsMS44LDExLjgKCWMxLjIsMy43LDMuMSw3LDUuNyw5LjhzNi4xLDUuMSwxMC4zLDYuN2M0LjIsMS43LDkuNCwyLjUsMTUuNiwyLjVoMzAuOWM2LDAsMTEuMi0wLjgsMTUuNC0yLjVjNC4yLTEuNyw3LjctMy45LDEwLjQtNi44CgljMi43LTIuOSw0LjctNi4xLDUuOS05LjljMS4yLTMuNywxLjktNy42LDEuOS0xMS43UzUwMC41LDE4OS4xLDQ5OS4zLDE4NS4zTDQ5OS4zLDE4NS4zeiBNNDc5LjYsMjAyLjZjLTAuNiwxLjgtMS41LDMuNC0yLjgsNC43CgljLTEuMywxLjQtMy4xLDIuNS01LjQsMy4zYy0yLjMsMC44LTUuMiwxLjItOC42LDEuMmgtMjEuM2MtMy42LDAtNi41LTAuNC04LjctMS4yYy0yLjItMC44LTQtMS45LTUuNC0zLjNjLTEuMy0xLjQtMi4yLTMtMi43LTQuNwoJYy0wLjUtMS44LTAuNy0zLjYtMC43LTUuNnMwLjItMy44LDAuNy01LjZzMS40LTMuNCwyLjctNC44YzEuMy0xLjQsMy4xLTIuNSw1LjQtMy4zczUuMS0xLjIsOC43LTEuMmgyMS4zYzMuNSwwLDYuMywwLjQsOC42LDEuMwoJczQuMSwxLjksNS40LDMuM3MyLjIsMywyLjgsNC43YzAuNSwxLjgsMC44LDMuNiwwLjgsNS42UzQ4MC4yLDIwMC44LDQ3OS42LDIwMi42eiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNTgwLjksMTY2Ljh2MzEuMWMwLDEuOS0wLjMsMy44LTAuOCw1LjVjLTAuNSwxLjctMS41LDMuMi0yLjgsNC40cy0zLjEsMi4yLTUuNCwzYy0yLjMsMC43LTUuMiwxLjEtOC42LDEuMQoJaC0xNi42Yy0zLjYsMC02LjUtMC40LTguNy0xLjFjLTIuMi0wLjctNC0xLjctNS4zLTNzLTIuMi0yLjgtMi43LTQuNGMtMC41LTEuNy0wLjctMy41LTAuNy01LjV2LTMxLjFoLTIwLjd2MzEuMgoJYzAsNC4xLDAuNiw4LDEuOCwxMS43czMuMSw2LjgsNS43LDkuNWMyLjYsMi43LDYuMSw0LjgsMTAuMyw2LjRjNC4yLDEuNiw5LjQsMi40LDE1LjYsMi40SDU2OGM2LDAsMTEuMi0wLjgsMTUuNC0yLjQKCWM0LjItMS42LDcuNy0zLjcsMTAuNC02LjVjMi43LTIuNyw0LjctNS45LDUuOS05LjZjMS4yLTMuNiwxLjktNy41LDEuOS0xMS42di0zMS4yTDU4MC45LDE2Ni44TDU4MC45LDE2Ni44eiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNjk2LjQsMTgzLjF2LTE2LjRoLTg0djYwLjNoODR2LTE2LjRINjMzdi02aDU4di0xNS41aC01OHYtNkw2OTYuNCwxODMuMUw2OTYuNCwxODMuMXoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTc4OC44LDIwMS40Yy0wLjYtMi4xLTEuOS00LjEtNC01LjljLTItMS44LTQuOS0zLjMtOC42LTQuNWMtMy43LTEuMi04LjYtMS44LTE0LjctMS44aC0yMQoJYy0zLjUsMC02LjUsMC04LjctMC4xYy0yLjIsMC00LTAuMS01LjMtMC4zYy0xLjMtMC4yLTIuMi0wLjUtMi43LTAuOWMtMC41LTAuNC0wLjctMC45LTAuNy0xLjZjMC0wLjgsMC4zLTEuNCwwLjctMS45CgljMC41LTAuNSwxLjQtMC44LDIuNy0xYzEuMy0wLjIsMy4xLTAuMyw1LjMtMC40YzIuMi0wLjEsNS4yLTAuMSw4LjctMC4xaDE3LjljMS40LDAsMjguMSwwLjEsMjkuMSwwLjJ2LTE2LjRoLTU2LjkKCWMtNi4yLDAtMTEuMSwwLjYtMTQuOCwxLjljLTMuNywxLjMtNi41LDIuOS04LjUsNC44Yy0yLDEuOS0zLjMsNC4xLTQsNi40Yy0wLjYsMi40LTAuOSw0LjYtMC45LDYuOGMwLDEuOCwwLjMsMy43LDAuOSw1LjgKCXMyLDQuMSw0LDUuOWMyLDEuOCw0LjksMy4zLDguNSw0LjVjMy43LDEuMiw4LjYsMS44LDE0LjgsMS44aDIwLjljMy41LDAsNi40LDAsOC43LDAuMWMyLjMsMCw0LjEsMC4xLDUuNCwwLjMKCWMxLjMsMC4yLDIuMiwwLjUsMi43LDAuOWMwLjUsMC40LDAuNywwLjksMC43LDEuNmMwLDAuOC0wLjIsMS40LTAuNywxLjljLTAuNSwwLjUtMS40LDAuOC0yLjcsMWMtMS4zLDAuMi0zLjEsMC40LTUuNCwwLjQKCWMtMi4zLDAtNS4yLDAtOC43LDBoLTQ3LjN2MTYuMmg1Ny4zYzYuMSwwLDExLTAuNiwxNC43LTEuOWMzLjctMS4yLDYuNS0yLjgsOC42LTQuOGMyLTEuOSwzLjMtNC4xLDQtNi40YzAuNi0yLjQsMS00LjYsMS02LjgKCUM3ODkuOCwyMDUuNCw3ODkuNCwyMDMuNSw3ODguOCwyMDEuNEw3ODguOCwyMDEuNHoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTc5Mi44LDE2Ni44djE2LjRoMzIuOXY0My45aDIwLjd2LTQzLjloMzIuOHYtMTYuNEw3OTIuOCwxNjYuOEw3OTIuOCwxNjYuOHoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTU1NS4xLDY1bC0yNi4xLDMuMnYxMS4ybDUuMy0wLjZsMjEuMS0yLjVsMjAuNCwyLjVsNS4xLDAuNlY2OC4yTDU1NS4xLDY1TDU1NS4xLDY1eiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNDEwLjEsMjc0LjhoLTYuOXYtMTkuMmg2LjljMi44LDAsNS4xLDAuOSw2LjgsMi42czIuNiw0LjEsMi42LDdzLTAuOSw1LjMtMi42LDcKCUM0MTUuMiwyNzQsNDEyLjksMjc0LjgsNDEwLjEsMjc0LjhMNDEwLjEsMjc0Ljh6IE00MDcsMjcxLjNoM2MxLjcsMCwzLjEtMC41LDQuMS0xLjZjMS4xLTEsMS42LTIuNiwxLjYtNC41cy0wLjUtMy41LTEuNi00LjYKCWMtMS4xLTEuMS0yLjUtMS42LTQuMS0xLjZoLTNMNDA3LDI3MS4zTDQwNywyNzEuM3oiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTQyMS43LDI2NS4yYzAtMywxLTUuNCwyLjktNy4zYzEuOS0xLjgsNC4yLTIuOCw3LTIuOHM1LDAuOSw3LDIuOGMxLjksMS44LDIuOSw0LjMsMi45LDcuM3MtMSw1LjQtMi45LDcuMgoJcy00LjMsMi44LTcsMi44cy01LTAuOS03LTIuOFM0MjEuNywyNjguMiw0MjEuNywyNjUuMnogTTQyNy40LDI2MC41Yy0xLjIsMS4xLTEuOCwyLjctMS44LDQuN3MwLjYsMy42LDEuOCw0LjcKCWMxLjIsMS4xLDIuNiwxLjcsNC4yLDEuN3MzLTAuNSw0LjItMS43YzEuMi0xLjEsMS44LTIuNywxLjgtNC43cy0wLjYtMy42LTEuOC00LjdjLTEuMi0xLjEtMi42LTEuNy00LjItMS43CglTNDI4LjYsMjU5LjQsNDI3LjQsMjYwLjV6Ii8+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik00NjEuMSwyNzQuOGgtMy45bC04LjctMTMuNnYxMy42aC0zLjd2LTE5LjJoNC43bDgsMTIuN3YtMTIuN2gzLjdWMjc0Ljh6Ii8+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik00ODEuOCwyNzQuOGgtMy45bC04LjctMTMuNnYxMy42aC0zLjd2LTE5LjJoNC43bDgsMTIuN3YtMTIuN2gzLjdWMjc0Ljh6Ii8+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik00ODUuMSwyNjUuMmMwLTMsMS01LjQsMi45LTcuM2MxLjktMS44LDQuMi0yLjgsNy0yLjhzNSwwLjksNywyLjhjMS45LDEuOCwyLjksNC4zLDIuOSw3LjNzLTEsNS40LTIuOSw3LjIKCXMtNC4zLDIuOC03LDIuOHMtNS0wLjktNy0yLjhTNDg1LjEsMjY4LjIsNDg1LjEsMjY1LjJ6IE00OTAuOCwyNjAuNWMtMS4yLDEuMS0xLjgsMi43LTEuOCw0LjdzMC42LDMuNiwxLjgsNC43CgljMS4yLDEuMSwyLjYsMS43LDQuMiwxLjdzMy0wLjUsNC4yLTEuN2MxLjItMS4xLDEuOC0yLjcsMS44LTQuN3MtMC42LTMuNi0xLjgtNC43Yy0xLjItMS4xLTIuNi0xLjctNC4yLTEuNwoJUzQ5MS45LDI1OS40LDQ5MC44LDI2MC41eiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNTI0LjUsMjc0LjhoLTMuOWwtOC43LTEzLjZ2MTMuNmgtMy43di0xOS4yaDQuN2w4LDEyLjd2LTEyLjdoMy43VjI3NC44eiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNTQxLjgsMjYwLjJsLTMuNCwxYy0wLjEtMC43LTAuNS0xLjMtMS0xLjljLTAuNi0wLjYtMS40LTAuOC0yLjUtMC44Yy0wLjksMC0xLjYsMC4yLTIuMiwwLjdzLTAuOCwxLTAuOCwxLjcKCWMwLDEuMiwwLjcsMS45LDIuMSwyLjJsMi43LDAuNWMxLjcsMC4zLDMsMSw0LDJzMS40LDIuMiwxLjQsMy42YzAsMS42LTAuNiwzLTEuOSw0LjJjLTEuMywxLjItMi45LDEuOC01LDEuOAoJYy0xLjIsMC0yLjMtMC4yLTMuMy0wLjVjLTEtMC40LTEuOC0wLjgtMi40LTEuNWMtMC42LTAuNi0xLjEtMS4yLTEuNC0xLjljLTAuMy0wLjctMC41LTEuNC0wLjYtMi4xbDMuNS0wLjljMC4xLDEsMC41LDEuOSwxLjIsMi42CgljMC43LDAuNywxLjcsMSwzLDFjMSwwLDEuNy0wLjIsMi4zLTAuNnMwLjgtMSwwLjgtMS43YzAtMC42LTAuMi0xLTAuNi0xLjVzLTEtMC43LTEuNy0wLjhsLTIuNy0wLjVjLTEuNS0wLjMtMi44LTEtMy43LTEuOQoJYy0wLjktMS0xLjMtMi4xLTEuMy0zLjZjMC0xLjcsMC43LTMuMSwyLTQuM3MyLjktMS43LDQuNy0xLjdjMS4xLDAsMi4xLDAuMSwzLDAuNWMwLjksMC4zLDEuNiwwLjcsMi4xLDEuMmMwLjUsMC41LDAuOSwxLDEuMiwxLjYKCUM1NDEuNCwyNTksNTQxLjYsMjU5LjYsNTQxLjgsMjYwLjJMNTQxLjgsMjYwLjJ6Ii8+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik01NTguNywyNzQuOGgtNi44di0xOS4yaDYuOWMyLjgsMCw1LjEsMC45LDYuOCwyLjZzMi42LDQuMSwyLjYsN3MtMC45LDUuMy0yLjcsNwoJQzU2My44LDI3NCw1NjEuNSwyNzQuOCw1NTguNywyNzQuOEw1NTguNywyNzQuOHogTTU1NS42LDI3MS4zaDNjMS43LDAsMy4xLTAuNSw0LjEtMS42YzEuMS0xLDEuNi0yLjYsMS42LTQuNXMtMC41LTMuNS0xLjYtNC42CgljLTEuMS0xLjEtMi41LTEuNi00LjEtMS42aC0zTDU1NS42LDI3MS4zTDU1NS42LDI3MS4zeiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNTc4LjcsMjc1LjJjLTIuMSwwLTMuOS0wLjYtNS4zLTEuOXMtMi4xLTMtMi4xLTUuM3YtMTIuNGgzLjd2MTIuMWMwLDEuMiwwLjMsMi4yLDEsMi45YzAuNiwwLjcsMS41LDEsMi43LDEKCXMyLTAuMywyLjctMXMxLTEuNiwxLTIuOXYtMTIuMWgzLjdWMjY4YzAsMi4zLTAuNyw0LTIuMSw1LjNDNTgyLjYsMjc0LjYsNTgwLjgsMjc1LjIsNTc4LjcsMjc1LjJMNTc4LjcsMjc1LjJ6Ii8+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik02MDkuOCwyNjAuMmwtMy40LDFjLTAuMS0wLjctMC41LTEuMy0xLTEuOWMtMC42LTAuNi0xLjQtMC44LTIuNS0wLjhjLTAuOSwwLTEuNiwwLjItMi4yLDAuN3MtMC44LDEtMC44LDEuNwoJYzAsMS4yLDAuNywxLjksMi4xLDIuMmwyLjcsMC41YzEuNywwLjMsMywxLDQsMnMxLjQsMi4yLDEuNCwzLjZjMCwxLjYtMC42LDMtMS45LDQuMmMtMS4zLDEuMi0yLjksMS44LTUsMS44CgljLTEuMiwwLTIuMy0wLjItMy4zLTAuNWMtMS0wLjQtMS44LTAuOC0yLjQtMS41Yy0wLjYtMC42LTEuMS0xLjItMS40LTEuOWMtMC4zLTAuNy0wLjUtMS40LTAuNi0yLjFsMy41LTAuOWMwLjEsMSwwLjUsMS45LDEuMiwyLjYKCWMwLjcsMC43LDEuNywxLDMsMWMxLDAsMS43LTAuMiwyLjMtMC42czAuOC0xLDAuOC0xLjdjMC0wLjYtMC4yLTEtMC42LTEuNXMtMS0wLjctMS43LTAuOGwtMi43LTAuNWMtMS41LTAuMy0yLjgtMS0zLjctMS45CgljLTAuOS0xLTEuMy0yLjEtMS4zLTMuNmMwLTEuNywwLjctMy4xLDItNC4zczIuOS0xLjcsNC43LTEuN2MxLjEsMCwyLjEsMC4xLDMsMC41YzAuOSwwLjMsMS42LDAuNywyLjEsMS4yYzAuNSwwLjUsMC45LDEsMS4yLDEuNgoJQzYwOS41LDI1OSw2MDkuNywyNTkuNiw2MDkuOCwyNjAuMkw2MDkuOCwyNjAuMnoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTYyNS4zLDI3NC44aC0xMnYtMTkuMmgxMnYzLjVINjE3djQuNGg3LjV2My4zSDYxN3Y0LjRoOC4zVjI3NC44eiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNjQ1LjQsMjc0LjhoLTMuOWwtOC43LTEzLjZ2MTMuNkg2Mjl2LTE5LjJoNC43bDgsMTIuN3YtMTIuN2gzLjdWMjc0Ljh6Ii8+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik02NjIuNywyNjAuMmwtMy40LDFjLTAuMS0wLjctMC41LTEuMy0xLTEuOWMtMC42LTAuNi0xLjQtMC44LTIuNS0wLjhjLTAuOSwwLTEuNiwwLjItMi4yLDAuN3MtMC44LDEtMC44LDEuNwoJYzAsMS4yLDAuNywxLjksMi4xLDIuMmwyLjcsMC41YzEuNywwLjMsMywxLDQsMnMxLjQsMi4yLDEuNCwzLjZjMCwxLjYtMC42LDMtMS45LDQuMmMtMS4zLDEuMi0yLjksMS44LTUsMS44CgljLTEuMiwwLTIuMy0wLjItMy4zLTAuNWMtMS0wLjQtMS44LTAuOC0yLjQtMS41Yy0wLjYtMC42LTEuMS0xLjItMS40LTEuOWMtMC4zLTAuNy0wLjUtMS40LTAuNi0yLjFsMy41LTAuOWMwLjEsMSwwLjUsMS45LDEuMiwyLjYKCWMwLjcsMC43LDEuNywxLDMsMWMxLDAsMS43LTAuMiwyLjMtMC42czAuOC0xLDAuOC0xLjdjMC0wLjYtMC4yLTEtMC42LTEuNXMtMS0wLjctMS43LTAuOGwtMi43LTAuNWMtMS41LTAuMy0yLjgtMS0zLjctMS45CgljLTAuOS0xLTEuMy0yLjEtMS4zLTMuNmMwLTEuNywwLjctMy4xLDItNC4zczIuOS0xLjcsNC43LTEuN2MxLjEsMCwyLjEsMC4xLDMsMC41YzAuOSwwLjMsMS42LDAuNywyLjEsMS4yYzAuNSwwLjUsMC45LDEsMS4yLDEuNgoJQzY2Mi40LDI1OSw2NjIuNiwyNTkuNiw2NjIuNywyNjAuMkw2NjIuNywyNjAuMnoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTY4NS45LDI3NC44bC0xLjYtNC40aC03LjhsLTEuNiw0LjRoLTRsNy40LTE5LjJoNC4zbDcuMywxOS4ySDY4NS45TDY4NS45LDI3NC44eiBNNjgwLjQsMjU5LjhsLTIuNyw3LjNoNS4zCglMNjgwLjQsMjU5LjhMNjgwLjQsMjU5Ljh6Ii8+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik02OTksMjc1LjJjLTIuMSwwLTMuOS0wLjYtNS4zLTEuOXMtMi4xLTMtMi4xLTUuM3YtMTIuNGgzLjd2MTIuMWMwLDEuMiwwLjMsMi4yLDEsMi45czEuNSwxLDIuNywxczItMC4zLDIuNy0xCglzMS0xLjYsMS0yLjl2LTEyLjFoMy43VjI2OGMwLDIuMy0wLjcsNC0yLjEsNS4zQzcwMi45LDI3NC42LDcwMS4xLDI3NS4yLDY5OSwyNzUuMkw2OTksMjc1LjJ6Ii8+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik03MjUuOSwyNTUuNmwtNi4zLDkuNmw2LjMsOS42aC00LjVsLTQuMS02LjZsLTQuMiw2LjZoLTQuNGw2LjMtOS42bC02LjMtOS42aDQuNWw0LjEsNi42bDQuMi02LjZMNzI1LjksMjU1LjYKCUw3MjUuOSwyNTUuNnoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTc0Ny4zLDI3NC44aC0xMnYtMTkuMmgxMnYzLjVINzM5djQuNGg3LjV2My4zSDczOXY0LjRoOC4zVjI3NC44eiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNNzcyLjUsMjc0LjhoLTMuN3YtMTMuNWwtNS41LDEzLjVoLTMuMWwtNS41LTEzLjR2MTMuNGgtMy42di0xOS4yaDQuOWw1LjgsMTMuOWw1LjYtMTMuOWg1LjFMNzcyLjUsMjc0LjgKCUw3NzIuNSwyNzQuOHoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTc3NS43LDI2NS4yYzAtMywxLTUuNCwyLjktNy4zYzEuOS0xLjgsNC4yLTIuOCw3LTIuOHM1LDAuOSw3LDIuOGMxLjksMS44LDIuOSw0LjMsMi45LDcuM3MtMSw1LjQtMi45LDcuMgoJYy0xLjksMS44LTQuMywyLjgtNywyLjhzLTUtMC45LTctMi44Uzc3NS43LDI2OC4yLDc3NS43LDI2NS4yeiBNNzgxLjQsMjYwLjVjLTEuMiwxLjEtMS44LDIuNy0xLjgsNC43czAuNiwzLjYsMS44LDQuNwoJYzEuMiwxLjEsMi42LDEuNyw0LjIsMS43czMtMC41LDQuMi0xLjdjMS4yLTEuMSwxLjgtMi43LDEuOC00LjdzLTAuNi0zLjYtMS44LTQuN2MtMS4yLTEuMS0yLjYtMS43LTQuMi0xLjcKCVM3ODIuNiwyNTkuNCw3ODEuNCwyNjAuNXoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTgxMi4zLDI1OS4yaC02LjF2MTUuNmgtMy44di0xNS42aC02LjF2LTMuNmgxNS45TDgxMi4zLDI1OS4yTDgxMi4zLDI1OS4yeiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNODE4LjgsMjc0LjhIODE1di0xOS4yaDMuOFYyNzQuOHoiLz4KPHBhdGggY2xhc3M9InN0MCIgZD0iTTgyMiwyNjUuMmMwLTMsMS01LjQsMi45LTcuM2MxLjktMS44LDQuMi0yLjgsNy0yLjhzNSwwLjksNywyLjhjMS45LDEuOCwyLjksNC4zLDIuOSw3LjNzLTEsNS40LTIuOSw3LjIKCXMtNC4zLDIuOC03LDIuOHMtNS0wLjktNy0yLjhTODIyLDI2OC4yLDgyMiwyNjUuMnogTTgyNy43LDI2MC41Yy0xLjIsMS4xLTEuOCwyLjctMS44LDQuN3MwLjYsMy42LDEuOCw0LjdjMS4yLDEuMSwyLjYsMS43LDQuMiwxLjcKCXMzLTAuNSw0LjItMS43YzEuMi0xLjEsMS44LTIuNywxLjgtNC43cy0wLjYtMy42LTEuOC00LjdjLTEuMi0xLjEtMi42LTEuNy00LjItMS43UzgyOC44LDI1OS40LDgyNy43LDI2MC41eiIvPgo8cGF0aCBjbGFzcz0ic3QwIiBkPSJNODYxLjQsMjc0LjhoLTMuOWwtOC43LTEzLjZ2MTMuNkg4NDV2LTE5LjJoNC43bDgsMTIuN3YtMTIuN2gzLjdWMjc0Ljh6Ii8+CjxwYXRoIGNsYXNzPSJzdDAiIGQ9Ik04NzguNywyNjAuMmwtMy40LDFjLTAuMS0wLjctMC41LTEuMy0xLTEuOWMtMC42LTAuNi0xLjQtMC44LTIuNS0wLjhjLTAuOSwwLTEuNiwwLjItMi4yLDAuN3MtMC44LDEtMC44LDEuNwoJYzAsMS4yLDAuNywxLjksMi4xLDIuMmwyLjcsMC41YzEuNywwLjMsMywxLDQsMnMxLjQsMi4yLDEuNCwzLjZjMCwxLjYtMC42LDMtMS45LDQuMmMtMS4zLDEuMi0yLjksMS44LTUsMS44CgljLTEuMiwwLTIuMy0wLjItMy4zLTAuNWMtMS0wLjQtMS44LTAuOC0yLjQtMS41Yy0wLjYtMC42LTEuMS0xLjItMS40LTEuOWMtMC4zLTAuNy0wLjUtMS40LTAuNi0yLjFsMy41LTAuOWMwLjEsMSwwLjUsMS45LDEuMiwyLjYKCWMwLjcsMC43LDEuNywxLDMsMWMxLDAsMS43LTAuMiwyLjMtMC42czAuOC0xLDAuOC0xLjdjMC0wLjYtMC4yLTEtMC42LTEuNXMtMS0wLjctMS43LTAuOGwtMi43LTAuNWMtMS41LTAuMy0yLjgtMS0zLjctMS45CgljLTAuOS0xLTEuMy0yLjEtMS4zLTMuNmMwLTEuNywwLjctMy4xLDItNC4zczIuOS0xLjcsNC43LTEuN2MxLjEsMCwyLjEsMC4xLDMsMC41YzAuOSwwLjMsMS42LDAuNywyLjEsMS4yYzAuNSwwLjUsMC45LDEsMS4yLDEuNgoJQzg3OC4zLDI1OSw4NzguNSwyNTkuNiw4NzguNywyNjAuMkw4NzguNywyNjAuMnoiLz4KPHBvbHlnb24gY2xhc3M9InN0MCIgcG9pbnRzPSI3NDYuNCwyNDkuOCA3NDIuNSwyNTMuMyA3MzkuMiwyNTMuMyA3NDIsMjQ5LjggIi8+CjxwYXRoIGNsYXNzPSJzdDEiIGQ9Ik03MzUuMywyNTUuNmgxMnYxOS4yaC0xMnYtMy41aDguM3YtNC40aC03LjV2LTMuM2g3LjV2LTQuNGgtOC4zVjI1NS42TDczNS4zLDI1NS42eiIvPgo8cG9seWdvbiBjbGFzcz0ic3QxIiBwb2ludHM9IjczNi4yLDI4MC41IDc0MC4yLDI3Ny4xIDc0My41LDI3Ny4xIDc0MC43LDI4MC41ICIvPgo8L3N2Zz4K"); }
+header h1{ font-family:"Barlow Condensed","Arial Narrow",sans-serif; font-weight:700; font-size:clamp(2rem,4.5vw,2.9rem); line-height:1.05; margin:0 0 6px; letter-spacing:-.01em; }
+header p{ margin:0; color:var(--muted); max-width:70ch; }
+.grid{ display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); gap:22px; margin-top:24px; align-items:start; }
+@media (max-width:900px){ .grid{ grid-template-columns:minmax(0,1fr); } }
+.panel{ background:var(--card); border:1px solid var(--line); border-radius:10px; padding:20px; }
+.panel h2{ font-family:"Barlow Condensed","Arial Narrow",sans-serif; font-weight:600; font-size:1.3rem; margin:0 0 12px; }
+fieldset{ border:0; padding:0; margin:0 0 20px; }
+legend{ font-weight:600; margin-bottom:8px; padding:0; }
+.seg{ display:grid; grid-template-columns:repeat(3,1fr); border:1px solid var(--line); border-radius:8px; overflow:hidden; }
+.seg.two{ grid-template-columns:repeat(2,1fr); }
+.seg label{ position:relative; text-align:center; padding:10px 6px; cursor:pointer; font-weight:500; font-size:.95rem; border-left:1px solid var(--line); }
+.seg label:first-child{ border-left:0; }
+.seg input{ position:absolute; opacity:0; inset:0; cursor:pointer; }
+.seg label:has(input:checked){ background:var(--ink); color:var(--card); }
+.seg label:has(input:focus-visible){ outline:3px solid var(--focus); outline-offset:-3px; }
+.check{ display:flex; gap:10px; align-items:flex-start; margin-top:10px; cursor:pointer; }
+.check input{ width:18px; height:18px; margin-top:2px; accent-color:var(--ink); }
+.row{ display:flex; flex-wrap:wrap; gap:12px 22px; margin-top:12px; align-items:flex-end; }
+.stack{ display:grid; gap:10px; margin-top:14px; max-width:30rem; }
+.f.line{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+.f.line label{ margin:0; }
+.f label{ display:block; font-size:.88rem; color:var(--muted); margin-bottom:4px; }
+input[type=text], select{ width:auto; max-width:100%; font:inherit; color:var(--ink); background:var(--field); border:1px solid var(--line); border-radius:6px; padding:9px 10px; }
+input[type=text]{ font-variant-numeric:tabular-nums; text-align:right; width:7.5em; }
+input:focus-visible, select:focus-visible{ outline:3px solid var(--focus); outline-offset:1px; }
+.amounts{ display:grid; grid-template-columns:auto repeat(3,7.5em); justify-content:start; gap:8px 10px; align-items:center; }
+.amounts input[type=text]{ width:100%; }
+@media (max-width:520px){ .amounts{ grid-template-columns:auto repeat(3,minmax(0,1fr)); } }
+.amounts .h{ font-size:.85rem; color:var(--muted); text-align:right; }
+.amounts .side{ font-weight:600; }
+.amounts input.active{ border-color:var(--ink); box-shadow:inset 0 -3px 0 var(--accent); }
+.hint{ font-size:.88rem; color:var(--muted); margin:8px 0 0; }
+details{ border-top:1px solid var(--line); padding-top:14px; }
+summary{ cursor:pointer; font-weight:600; }
+summary:focus-visible{ outline:3px solid var(--focus); outline-offset:2px; }
+.opt{ margin-top:14px; }
+.hidden{ display:none !important; }
+
+/* Bulletin */
+.heads{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:14px; padding-bottom:14px; border-bottom:2px solid var(--ink); }
+.hd .lbl{ display:block; color:var(--muted); font-size:.9rem; margin-bottom:4px; }
+.hd .big{ font-family:"Barlow Condensed","Arial Narrow",sans-serif; font-weight:700; font-size:clamp(1.8rem,4vw,2.5rem); line-height:1; font-variant-numeric:tabular-nums; white-space:nowrap; padding:0 2px; }
+.step{ display:flex; }
+.step input[type=text]{ border-radius:0; text-align:center; min-width:0; width:4em; }
+.sb{ flex:none; width:38px; font:inherit; font-size:1.15rem; line-height:1; color:var(--ink); background:var(--card); border:1px solid var(--line); cursor:pointer; }
+.sb:first-child{ border-radius:6px 0 0 6px; border-right:0; }
+.sb:last-child{ border-radius:0 6px 6px 0; border-left:0; }
+.sb:hover{ background:var(--field); }
+.sb:focus-visible{ outline:3px solid var(--focus); outline-offset:1px; position:relative; }
+.trio{ display:grid; grid-template-columns:repeat(2,1fr); gap:10px; margin:14px 0 6px; }
+.trio div{ font-variant-numeric:tabular-nums; }
+.trio small{ display:block; color:var(--muted); font-size:.82rem; }
+.trio b{ font-size:1.15rem; font-weight:600; }
+.scroll{ overflow-x:auto; margin-top:12px; }
+table{ width:100%; border-collapse:collapse; font-size:.93rem; font-variant-numeric:tabular-nums; min-width:480px; }
+th, td{ padding:6px 6px; text-align:right; border-bottom:1px solid var(--line); }
+th:first-child, td:first-child{ text-align:left; }
+thead th{ font-weight:600; color:var(--muted); font-size:.82rem; }
+tr.grp td{ font-weight:600; padding-top:14px; border-bottom:0; color:var(--ink); }
+tr.tot td{ font-weight:600; border-top:2px solid var(--ink); border-bottom:0; }
+tr.minus td:last-child{ color:var(--good); }
+td.sub{ padding-left:14px; }
+.notes{ margin-top:16px; display:grid; gap:8px; }
+.note{ font-size:.9rem; padding:9px 12px; border-radius:6px; background:var(--field); border-left:3px solid var(--line); }
+.note.warn{ background:var(--warn-bg); border-left-color:var(--accent); }
+table.simple{ min-width:0; margin-top:10px; font-size:1rem; }
+table.simple td{ padding:8px 4px; }
+table.simple td.p{ color:var(--muted); font-size:.85rem; width:5.5em; }
+table.simple tr.tot td{ font-weight:600; }
+details.detail{ margin-top:14px; }
+footer{ margin-top:28px; color:var(--muted); font-size:.85rem; max-width:90ch; }
+footer h3{ font-size:.95rem; color:var(--ink); margin:0 0 6px; }
+footer ul{ margin:0; padding-left:18px; }
+
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="logo" role="img" aria-label="Côte Ouest"></div>
+    <h1>Du brut au net</h1>
+    <p>Simulation pour les salariés intermittents du spectacle (annexes 8 et 10) et du régime général. Barèmes en vigueur en 2026. Le calcul suit les taux ligne par ligne, comme sur un bulletin.</p>
+  </header>
+
+  <div class="grid">
+    <!-- Saisie -->
+    <section class="panel" aria-label="Paramètres de la simulation">
+      <fieldset>
+        <legend>Statut du salarié</legend>
+        <div class="seg" role="radiogroup">
+          <label><input type="radio" name="statut" value="tech" checked>Technicien intermittent</label>
+          <label><input type="radio" name="statut" value="art">Artiste intermittent</label>
+          <label><input type="radio" name="statut" value="rg">Régime général</label>
+        </div>
+        <label class="check"><input type="checkbox" id="cadre"><span>Cadre</span></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Période travaillée</legend>
+        <div class="seg two" id="periodeRG">
+          <label><input type="radio" name="periode" value="mois" checked>Mois complet</label>
+          <label><input type="radio" name="periode" value="court">Contrat court</label>
+        </div>
+        <div class="row">
+          <div class="f" id="fJours"><label for="jours">Jours travaillés</label><div class="step"><button type="button" class="sb" data-for="jours" data-step="-0.5" aria-label="Retirer une demi-journée">−</button><input type="text" id="jours" inputmode="decimal" value="1"><button type="button" class="sb" data-for="jours" data-step="0.5" aria-label="Ajouter une demi-journée">+</button></div></div>
+          <div class="f" id="fHJour"><label for="hJour">Heures par jour</label><div class="step"><button type="button" class="sb" data-for="hJour" data-step="-1" aria-label="Retirer une heure">−</button><input type="text" id="hJour" inputmode="decimal" value="8"><button type="button" class="sb" data-for="hJour" data-step="1" aria-label="Ajouter une heure">+</button></div></div>
+          <div class="f" id="fHMois"><label for="hMois">Heures par mois</label><div class="step"><button type="button" class="sb" data-for="hMois" data-step="-1" aria-label="Retirer une heure">−</button><input type="text" id="hMois" inputmode="decimal" value="151,67"><button type="button" class="sb" data-for="hMois" data-step="1" aria-label="Ajouter une heure">+</button></div></div>
+          <div class="f" id="fJMois"><label for="jMois">Jours par mois</label><div class="step"><button type="button" class="sb" data-for="jMois" data-step="-0.5" aria-label="Retirer une demi-journée">−</button><input type="text" id="jMois" inputmode="decimal" value="21,67"><button type="button" class="sb" data-for="jMois" data-step="0.5" aria-label="Ajouter une demi-journée">+</button></div></div>
+        </div>
+        <label class="check" id="fArtCourt"><input type="checkbox" id="artCourt" checked><span>Engagement de moins de 5 jours consécutifs chez cet employeur</span></label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Montants</legend>
+        <div class="amounts">
+          <span></span><span class="h">Horaire</span><span class="h">Journalier</span><span class="h" id="hTotal">Total période</span>
+          <span class="side">Brut</span>
+          <input type="text" inputmode="decimal" data-side="brut" data-unit="h" aria-label="Brut horaire">
+          <input type="text" inputmode="decimal" data-side="brut" data-unit="j" aria-label="Brut journalier">
+          <input type="text" inputmode="decimal" data-side="brut" data-unit="t" aria-label="Brut total">
+          <span class="side">Net</span>
+          <input type="text" inputmode="decimal" data-side="net" data-unit="h" aria-label="Net horaire">
+          <input type="text" inputmode="decimal" data-side="net" data-unit="j" aria-label="Net journalier">
+          <input type="text" inputmode="decimal" data-side="net" data-unit="t" aria-label="Net total">
+        </div>
+        <p class="hint">Saisissez un montant dans n’importe quelle case, brut ou net : les autres se recalculent. Le net s’entend avant prélèvement à la source.</p>
+      </fieldset>
+
+      <details open>
+        <summary>Options</summary>
+        <div class="opt" id="oDfs">
+          <div class="f"><label for="dfs">Abattement pour frais professionnels (DFS)</label>
+            <select id="dfs">
+              <option value="0">Aucun</option>
+              <option value="0.16">Musiciens, choristes, chefs d’orchestre, régisseurs de théâtre : 16 % en 2026</option>
+              <option value="0.18">Artistes dramatiques, lyriques, chorégraphiques, de cinéma : 18 % en 2026</option>
+            </select></div>
+        </div>
+        <div class="opt" id="oPrimes">
+          <div class="row" style="margin-top:0">
+            <div class="f"><label for="outilType">Prime outillage</label>
+              <select id="outilType">
+                <option value="0">Aucune</option>
+                <option value="13.02">Outillage de base : 13,02 € brut</option>
+                <option value="26.04">Outillage complet : 26,04 € brut</option>
+              </select></div>
+            <div class="f"><label for="outilNb">Nombre de primes outillage</label><div class="step"><button type="button" class="sb" data-for="outilNb" data-step="-1" aria-label="Retirer une prime outillage">−</button><input type="text" id="outilNb" inputmode="decimal" value="0"><button type="button" class="sb" data-for="outilNb" data-step="1" aria-label="Ajouter une prime outillage">+</button></div></div>
+          </div>
+          <div class="row">
+            <div class="f"><label for="soirNb">Primes soir, après 20 h (19,56 € brut)</label><div class="step"><button type="button" class="sb" data-for="soirNb" data-step="-1" aria-label="Retirer une prime soir">−</button><input type="text" id="soirNb" inputmode="decimal" value="0"><button type="button" class="sb" data-for="soirNb" data-step="1" aria-label="Ajouter une prime soir">+</button></div></div>
+            <div class="f"><label for="nuitNb">Primes nuit, après minuit (39,12 € brut)</label><div class="step"><button type="button" class="sb" data-for="nuitNb" data-step="-1" aria-label="Retirer une prime nuit">−</button><input type="text" id="nuitNb" inputmode="decimal" value="0"><button type="button" class="sb" data-for="nuitNb" data-step="1" aria-label="Ajouter une prime nuit">+</button></div></div>
+          </div>
+          <label class="check"><input type="checkbox" id="primeEpi"><span>Prime EPI : 2,59 € brut par jour, calculée sur le nombre de jours travaillés</span></label>
+          <p class="hint">Primes de la grille techniciens 2026. Outillage et EPI uniquement sur les jours terrain. Soir et nuit ne se cumulent pas sur une même journée.</p>
+        </div>
+        <div class="opt" id="oHs">
+          <div class="f"><label for="hs">Dont heures supplémentaires (brut, en €)</label><input type="text" id="hs" inputmode="decimal" value="0"></div>
+        </div>
+        <label class="check" id="oCdd"><input type="checkbox" id="cdd"><span>CDD classique : ajouter l’indemnité de précarité (10 %) et les congés payés (10 %)</span></label>
+        <div class="stack">
+          <div class="f line"><label for="mut">Mutuelle et prévoyance, part salariale (€)</label><input type="text" id="mut" inputmode="decimal" value="0"></div>
+          <div class="f line"><label for="pas">Taux de prélèvement à la source (%)</label><input type="text" id="pas" inputmode="decimal" value="0"></div>
+          <div class="f line"><label for="ratio">Ratio coût employeur (× brut)</label><input type="text" id="ratio" inputmode="decimal" value="1,65"></div>
+        </div>
+        <label class="check"><input type="checkbox" id="alsace"><span>Salarié relevant du régime local d’Alsace-Moselle</span></label>
+      </details>
+    </section>
+
+    <!-- Résultat -->
+    <section class="panel" aria-live="polite" aria-label="Résultat">
+      <div class="heads">
+        <div class="hd"><span class="lbl" id="brutLbl">Brut total</span><span class="big" id="brutBig">–</span></div>
+        <div class="hd isnet"><span class="lbl" id="netLbl">Net avant impôt</span><span class="big" id="netBig">–</span></div>
+        <div class="hd"><span class="lbl" id="costLbl">Coût employeur</span><span class="big" id="nCost">–</span></div>
+      </div>
+      <div class="trio">
+        <div><small>Net horaire</small><b id="nH">–</b></div>
+        <div><small>Net journalier</small><b id="nJ">–</b></div>
+      </div>
+      <table class="simple">
+        <tbody id="summary"></tbody>
+      </table>
+      <details class="detail">
+        <summary>Détail ligne par ligne</summary>
+        <div class="scroll">
+          <table>
+            <thead><tr><th>Ligne</th><th>Base</th><th>Taux</th><th>Montant</th></tr></thead>
+            <tbody id="lines"></tbody>
+          </table>
+        </div>
+      </details>
+      <div class="notes" id="notes"></div>
+    </section>
+  </div>
+
+  <footer>
+    <h3>Barèmes et sources</h3>
+    <ul>
+      <li>Plafond de la Sécurité sociale 2026 (arrêté du 22 décembre 2025) : 4 005 € par mois, 220 € par jour, 30 € par heure.</li>
+      <li>SMIC horaire brut : 12,31 € depuis le 1er juin 2026.</li>
+      <li>Cotisations salariales du régime général : Urssaf, taux au 1er janvier 2026. Taux réduits des artistes du spectacle : 70 % du droit commun (vieillesse 4,83 % plafonnée et 0,28 % déplafonnée).</li>
+      <li>Retraite complémentaire, prévoyance et congés spectacles des intermittents : Audiens, « Paramètres 2026 ».</li>
+      <li>Assurance chômage des intermittents : 2,40 % à la charge du salarié.</li>
+      <li>Primes EPI et outillage : grille salaires techniciens Côte Ouest 2026 (mise à jour du 23 septembre 2026). Coût employeur : ratio budgétaire interne de 1,65.</li>
+      <li>DFS du spectacle : barème dégressif sectoriel (16 % et 18 % en 2026). Il suppose l’accord du salarié, ne s’applique ni à la CSG-CRDS ni au chômage, et reste limité à 7 600 € d’abattement par an.</li>
+    </ul>
+    <p>Simulation indicative : elle ne remplace pas le bulletin établi par le logiciel de paie. Taux conventionnels spécifiques, avantages en nature et cumuls annuels non pris en compte.</p>
+  </footer>
+</div>
+
+<script>
+/* ===== Paramètres annuels : à mettre à jour chaque 1er janvier ===== */
+const PARAMS = {
+  annee: 2026,
+  PMSS: 4005, PJSS: 220, PHSS: 30, PASS: 48060,
+  SMIC_H: 12.31,
+  vieil: { plaf: 0.069, deplaf: 0.004 },
+  vieilArtiste: { plaf: 0.0483, deplaf: 0.0028 },
+  rc: { t1: 0.0315, t2: 0.0864 },
+  rcInterTechNC: 0.0393, rcInterArtNC: 0.0444, rcInterNC_T2: 0.1079, rcInterCadreT1: 0.0393,
+  ceg: { t1: 0.0086, t2: 0.0108 },
+  cet: 0.0014, apec: 0.00024,
+  chomageInter: 0.024,
+  prevInter: 0.0012,
+  alsace: 0.013,
+  csgDed: 0.068, csgNonDed: 0.024, crds: 0.005, abattCsg: 0.9825,
+  hsReduc: 0.1131,
+  primeEpi: 2.59,          // grille techniciens CO 2026 (brut / jour terrain)
+  primeSoir: 19.56,        // après 20 h, non cumulable avec la prime nuit
+  primeNuit: 39.12,        // après minuit
+  ratioCoutDefaut: 1.65,   // ratio budgétaire interne CO
+  dfsMaxAn: 7600,
+  congesSpectacles: 0.10
+};
+
+/* ===== Moteur de calcul (indépendant de l’interface) ===== */
+function calcul(G0, o){
+  const P_ = PARAMS, L = [];
+  const add = (grp, label, base, taux, montant, minus) => L.push({grp, label, base, taux, montant, minus});
+  const inter = o.statut !== 'rg', art = o.statut === 'art';
+  const mois = !inter && o.moisComplet;
+  const jours = Math.max(o.jours, 0);
+
+  // Brut
+  let G = G0;
+  add('Brut', 'Salaire de base', null, null, G0, false);
+  if (o.statut === 'tech'){
+    const j = Math.max(o.jours, 0);
+    if (o.primeEpi){ const m = P_.primeEpi * j; add('Brut', 'Prime EPI', j, null, m); G += m; }
+    if (o.outilType > 0 && o.outilNb > 0){ const m = o.outilType * o.outilNb; add('Brut', 'Prime outillage', o.outilNb, null, m); G += m; }
+    if (o.soirNb > 0){ const m = P_.primeSoir * o.soirNb; add('Brut', 'Prime soir', o.soirNb, null, m); G += m; }
+    if (o.nuitNb > 0){ const m = P_.primeNuit * o.nuitNb; add('Brut', 'Prime nuit', o.nuitNb, null, m); G += m; }
+  }
+  const primes = G - G0;
+  if (!inter && o.cdd){
+    const prec = 0.10 * G0, cp = 0.10 * (G0 + prec);
+    add('Brut', 'Indemnité de précarité', G0, 0.10, prec);
+    add('Brut', 'Indemnité de congés payés', G0 + prec, 0.10, cp);
+    G += prec + cp;
+  }
+
+  // Plafonds de la période
+  let P;
+  if (mois) P = P_.PMSS;
+  else if (art && o.artCourt) P = Math.min(12 * P_.PHSS * jours, P_.PMSS);
+  else P = Math.min(P_.PJSS * jours, P_.PMSS);
+  const Pj = Math.min(P_.PJSS * jours, P_.PMSS); // tranche A journalière (Audiens)
+
+  // DFS
+  let B = G, abatt = 0;
+  if (inter && o.dfs > 0){
+    abatt = Math.min(G * o.dfs, P_.dfsMaxAn);
+    B = G - abatt;
+    add('Brut', 'Abattement frais professionnels (assiette)', G, o.dfs, abatt, true);
+  }
+
+  const cot = [];
+  const c = (grp, label, base, taux) => { const m = base * taux; cot.push(m); add(grp, label, base, taux, m); return m; };
+
+  // Sécurité sociale
+  const v = art ? P_.vieilArtiste : P_.vieil;
+  c('Sécurité sociale', 'Vieillesse plafonnée', Math.min(B, P), v.plaf);
+  c('Sécurité sociale', 'Vieillesse déplafonnée', B, v.deplaf);
+  if (o.alsace) c('Sécurité sociale', 'Maladie Alsace-Moselle', B, P_.alsace);
+
+  // Retraite complémentaire
+  if (!inter){
+    const t1 = Math.min(B, P), t2 = Math.min(Math.max(B - P, 0), 7 * P);
+    c('Retraite complémentaire', 'Agirc-Arrco T1', t1, P_.rc.t1);
+    if (t2 > 0) c('Retraite complémentaire', 'Agirc-Arrco T2', t2, P_.rc.t2);
+    c('Retraite complémentaire', 'CEG T1', t1, P_.ceg.t1);
+    if (t2 > 0){ c('Retraite complémentaire', 'CEG T2', t2, P_.ceg.t2); c('Retraite complémentaire', 'CET', t1 + t2, P_.cet); }
+    if (o.cadre) c('Retraite complémentaire', 'Apec', Math.min(B, 4 * P), P_.apec);
+  } else if (!o.cadre){
+    c('Retraite complémentaire', 'Audiens T1 (plafond annuel)', B, art ? P_.rcInterArtNC : P_.rcInterTechNC);
+    c('Retraite complémentaire', 'CEG T1', B, P_.ceg.t1);
+  } else {
+    const t1 = Math.min(B, Pj), t2 = Math.min(Math.max(B - Pj, 0), 7 * Pj);
+    c('Retraite complémentaire', 'Audiens T1 (plafond journalier)', t1, P_.rcInterCadreT1);
+    if (t2 > 0) c('Retraite complémentaire', 'Audiens T2', t2, P_.rc.t2);
+    c('Retraite complémentaire', 'CEG T1', t1, P_.ceg.t1);
+    if (t2 > 0){ c('Retraite complémentaire', 'CEG T2', t2, P_.ceg.t2); c('Retraite complémentaire', 'CET', t1 + t2, P_.cet); }
+    c('Retraite complémentaire', 'Apec', Math.min(B, 4 * Pj), P_.apec);
+  }
+
+  // Chômage et prévoyance intermittents
+  if (inter){
+    c('Chômage et prévoyance', 'Assurance chômage (annexes 8 et 10)', Math.min(G, 4 * P), P_.chomageInter);
+    c('Chômage et prévoyance', 'Prévoyance intermittents', Math.min(G, Pj), P_.prevInter);
+  }
+
+  // Heures supplémentaires (réduction de cotisations salariales)
+  const hs = (!inter) ? Math.min(Math.max(o.hs, 0), G0) : 0;
+  if (hs > 0){
+    const r = hs * P_.hsReduc; cot.push(-r);
+    add('Sécurité sociale', 'Réduction heures supplémentaires', hs, -P_.hsReduc, -r, true);
+  }
+
+  // CSG-CRDS (assiette sans DFS)
+  const lim = 4 * (mois ? P_.PMSS : P);
+  const baseCsg = P_.abattCsg * Math.min(G, lim) + Math.max(G - lim, 0);
+  c('CSG-CRDS', 'CSG déductible', baseCsg, P_.csgDed);
+  const csgND = c('CSG-CRDS', 'CSG non déductible', baseCsg, P_.csgNonDed);
+  const crds = c('CSG-CRDS', 'CRDS', baseCsg, P_.crds);
+
+  const totalCot = cot.reduce((a, b) => a + b, 0);
+  const mut = Math.max(o.mut, 0);
+  if (mut > 0) add('Mutuelle et prévoyance', 'Part salariale', null, null, mut);
+  const net = G - totalCot - mut;
+  let imposable = net + csgND + crds;
+  if (hs > 0) imposable -= hs * (1 - P_.abattCsg * P_.csgDed);
+  const pas = Math.max(imposable, 0) * Math.max(o.pas, 0) / 100;
+
+  const ratio = o.ratio > 0 ? o.ratio : P_.ratioCoutDefaut;
+  return { G0, G, B, abatt, P, Pj, lines: L, totalCot, mut, net, imposable, pas, netApresPas: net - pas, inter, art, hs, primes, ratio, cout: G * ratio };
+}
+
+/* ===== Interface ===== */
+const $ = s => document.querySelector(s);
+const eur = new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' });
+const num = v => v.toLocaleString('fr-FR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const pct = r => (r * 100).toLocaleString('fr-FR', { maximumFractionDigits: 3 }) + ' %';
+const parse = s => { const v = parseFloat(String(s).replace(/[\s\u202f€]/g, '').replace(',', '.')); return isNaN(v) ? 0 : v; };
+const amountInputs = [...document.querySelectorAll('.amounts input')];
+let active = { side: 'brut', unit: 'j', value: 250 };
+
+function readOptions(){
+  const statut = document.querySelector('input[name=statut]:checked').value;
+  return {
+    statut, cadre: $('#cadre').checked,
+    moisComplet: statut === 'rg' && document.querySelector('input[name=periode]:checked').value === 'mois',
+    jours: parse($('#jours').value), hJour: parse($('#hJour').value),
+    hMois: parse($('#hMois').value), jMois: parse($('#jMois').value),
+    artCourt: $('#artCourt').checked,
+    dfs: statut === 'rg' ? 0 : parseFloat($('#dfs').value),
+    hs: parse($('#hs').value), cdd: $('#cdd').checked && statut === 'rg',
+    mut: parse($('#mut').value), pas: parse($('#pas').value), alsace: $('#alsace').checked,
+    primeEpi: $('#primeEpi').checked, outilType: parseFloat($('#outilType').value),
+    outilNb: Math.max(parse($('#outilNb').value), 0), soirNb: Math.max(parse($('#soirNb').value), 0), nuitNb: Math.max(parse($('#nuitNb').value), 0),
+    ratio: parse($('#ratio').value)
+  };
+}
+
+function solve(target, o){
+  let lo = 0, hi = Math.max(target * 3, 100);
+  for (let i = 0; i < 80; i++){
+    const mid = (lo + hi) / 2;
+    if (calcul(mid, o).net < target) lo = mid; else hi = mid;
+  }
+  return (lo + hi) / 2;
+}
+
+function toggleFields(o){
+  const rg = o.statut === 'rg';
+  $('#periodeRG').classList.toggle('hidden', !rg);
+  $('#fJours').classList.toggle('hidden', o.moisComplet);
+  $('#fHJour').classList.toggle('hidden', o.moisComplet);
+  $('#fHMois').classList.toggle('hidden', !o.moisComplet);
+  $('#fJMois').classList.toggle('hidden', !o.moisComplet);
+  $('#fArtCourt').classList.toggle('hidden', o.statut !== 'art' || o.moisComplet);
+  $('#oDfs').classList.toggle('hidden', rg);
+  $('#oPrimes').classList.toggle('hidden', o.statut !== 'tech');
+  $('#oHs').classList.toggle('hidden', !rg);
+  $('#oCdd').classList.toggle('hidden', !rg || o.moisComplet);
+  $('#hTotal').textContent = o.moisComplet ? 'Mensuel' : 'Total période';
+  $('#netLbl').textContent = o.moisComplet ? 'Net mensuel avant impôt' : 'Net avant impôt';
+  $('#brutLbl').textContent = o.moisComplet ? 'Brut mensuel' : 'Brut total';
+}
+
+function update(){
+  const o = readOptions();
+  if (o.moisComplet){ o.cdd = false; }
+  toggleFields(o);
+  const H = o.moisComplet ? o.hMois : o.jours * o.hJour;
+  const D = o.moisComplet ? o.jMois : o.jours;
+  const toTotal = (u, v) => u === 'h' ? v * H : u === 'j' ? v * D : v;
+
+  let G0;
+  if (active.side === 'brut') G0 = toTotal(active.unit, active.value);
+  else G0 = solve(toTotal(active.unit, active.value), o);
+  const r = calcul(G0, o);
+
+  const vals = {
+    brut: { h: H ? G0 / H : 0, j: D ? G0 / D : 0, t: G0 },
+    net: { h: H ? r.net / H : 0, j: D ? r.net / D : 0, t: r.net }
+  };
+  amountInputs.forEach(el => {
+    const isActive = el.dataset.side === active.side && el.dataset.unit === active.unit;
+    el.classList.toggle('active', isActive);
+    if (!isActive || document.activeElement !== el) el.value = num(vals[el.dataset.side][el.dataset.unit]);
+  });
+
+  $('#netBig').textContent = eur.format(r.net);
+  $('#brutBig').textContent = eur.format(r.G);
+  $('#nH').textContent = H ? eur.format(r.net / H) : '–';
+  $('#nJ').textContent = D ? eur.format(r.net / D) : '–';
+  $('#nCost').textContent = eur.format(r.cout);
+  $('#costLbl').textContent = `Coût employeur (brut × ${r.ratio.toLocaleString('fr-FR')})`;
+
+  // Tableau simplifié
+  const sumGrp = g => r.lines.filter(l => l.grp === g).reduce((a, l) => a + l.montant, 0);
+  const share = v => r.G ? pct(v / r.G) : '';
+  const rows = [['', 'Salaire de base', r.G0]];
+  if (r.primes > 0) rows.push(['', 'Primes EPI et outillage', r.primes]);
+  const ind = r.G - r.G0 - r.primes;
+  if (ind > 0.004) rows.push(['', 'Indemnités de précarité et congés payés', ind]);
+  rows.push(['tot', 'Brut total', r.G]);
+  ['Sécurité sociale', 'Retraite complémentaire', 'Chômage et prévoyance', 'CSG-CRDS', 'Mutuelle et prévoyance'].forEach(g => {
+    const s = sumGrp(g); if (Math.abs(s) > 0.004) rows.push(['minus', g, s, true]);
+  });
+  rows.push(['tot', 'Net avant impôt', r.net]);
+  if (o.pas > 0){
+    rows.push(['minus', `Prélèvement à la source (${pct(o.pas / 100)} du net imposable)`, r.pas, true]);
+    rows.push(['tot', 'Net après prélèvement', r.netApresPas]);
+  }
+  $('#summary').innerHTML = rows.map(([c, lab, v, isMinus]) =>
+    `<tr class="${c}"><td>${lab}</td><td class="p">${isMinus ? share(v) : ''}</td><td>${(isMinus ? '−' : '') + num(v)}</td></tr>`).join('');
+
+  // Détail
+  let html = '', grp = '';
+  r.lines.forEach(l => {
+    if (l.grp !== grp){ grp = l.grp; html += `<tr class="grp"><td colspan="4">${grp}</td></tr>`; }
+    const isBrut = l.grp === 'Brut';
+    html += `<tr class="${l.minus ? 'minus' : ''}"><td class="sub">${l.label}</td><td>${l.base == null ? '' : num(l.base)}</td><td>${l.taux == null ? '' : pct(Math.abs(l.taux))}</td><td>${(l.minus ? '−' : '') + num(Math.abs(l.montant))}${isBrut && !l.minus ? '' : ''}</td></tr>`;
+  });
+  html += `<tr><td>Net imposable</td><td></td><td></td><td>${num(r.imposable)}</td></tr>`;
+  $('#lines').innerHTML = html;
+
+  // Notes
+  const n = [];
+  const hBrut = H ? r.G0 / H : 0;
+  if (H && hBrut > 0 && hBrut < PARAMS.SMIC_H) n.push(['warn', `Le brut horaire (${eur.format(hBrut)}) est inférieur au SMIC (${eur.format(PARAMS.SMIC_H)}). Vérifiez aussi le minimum de la convention collective.`]);
+  if (r.inter && !o.cadre) n.push(['', 'Intermittent non-cadre : la retraite complémentaire utilise le plafond annuel (48 060 €). Le calcul suppose que le cumul annuel chez cet employeur reste sous ce seuil, donc sans T2 ni CET.']);
+  if (r.inter) n.push(['', `Congés spectacles : environ ${eur.format(r.G * PARAMS.congesSpectacles)} brut à percevoir plus tard de la caisse Audiens, soit à peu près ${eur.format(r.G * PARAMS.congesSpectacles * (1 - r.totalCot / (r.G || 1)))} net. Ils ne figurent pas sur ce bulletin.`]);
+  if (r.abatt > 0) n.push(['warn', 'Abattement DFS : il faut l’accord écrit du salarié. Il réduit les cotisations mais aussi les droits retraite et chômage, et reste plafonné à 7 600 € par an.']);
+  if (o.alsace && r.art) n.push(['warn', 'Alsace-Moselle : le taux de droit commun (1,30 %) est appliqué. À vérifier pour un artiste.']);
+  if (o.cadre && !r.inter) n.push(['', 'Cadre : la prévoyance cadre est financée au moins à 1,50 % par l’employeur. Une éventuelle part salariale se saisit dans le champ mutuelle et prévoyance.']);
+  if (r.hs > 0) n.push(['', 'Heures supplémentaires : réduction de cotisations de 11,31 % au maximum et exonération d’impôt jusqu’à 7 500 € par an, appliquées de façon simplifiée.']);
+  if (o.statut === 'tech'){
+    const jMax = Math.ceil(o.jours);
+    if (o.soirNb + o.nuitNb > jMax) n.push(['warn', `Primes soir et nuit : ${o.soirNb + o.nuitNb} saisies pour ${jMax} jour(s). Elles ne se cumulent pas sur une même journée.`]);
+    if (o.outilType > 0 && o.outilNb > jMax) n.push(['warn', `Primes outillage : ${o.outilNb} saisies pour ${jMax} jour(s) travaillé(s).`]);
+    if (o.outilType > 0 && o.outilNb === 0) n.push(['', 'Prime outillage sélectionnée : saisissez le nombre de jours concernés.']);
+  }
+  n.push(['', `Coût employeur : estimation budgétaire au ratio de ${r.ratio.toLocaleString('fr-FR')} sur le brut total, volontairement arrondie au-dessus du coût réel.`]);
+  if (o.pas > 0) n.push(['', 'Prélèvement à la source simplifié : un seul taux appliqué au net imposable.']);
+  $('#notes').innerHTML = n.map(([c, t]) => `<div class="note ${c}">${t}</div>`).join('');
+}
+
+amountInputs.forEach(el => {
+  el.addEventListener('input', () => { active = { side: el.dataset.side, unit: el.dataset.unit, value: parse(el.value) }; update(); });
+  el.addEventListener('blur', update);
+});
+document.querySelectorAll('input:not([data-side]), select').forEach(el => {
+  el.addEventListener('input', update); el.addEventListener('change', update);
+});
+document.querySelectorAll('input[name=statut]').forEach(el => el.addEventListener('change', () => {
+  const s = el.value;
+  if (s === 'rg'){ document.querySelector('input[name=periode][value=mois]').checked = true; active = { side: 'brut', unit: 't', value: 2500 }; }
+  else { $('#jours').value = '1'; $('#hJour').value = s === 'art' ? '12' : '8'; active = { side: 'brut', unit: 'j', value: s === 'art' ? 200 : 250 }; }
+  update();
+}));
+document.querySelectorAll('input[name=periode]').forEach(el => el.addEventListener('change', () => {
+  if (el.value === 'court'){ $('#jours').value = '5'; $('#hJour').value = '7'; active = { side: 'brut', unit: 'j', value: 150 }; }
+  else { active = { side: 'brut', unit: 't', value: 2500 }; }
+  update();
+}));
+document.querySelectorAll('.sb').forEach(btn => btn.addEventListener('click', () => {
+  const el = document.getElementById(btn.dataset.for);
+  const v = Math.max(0, Math.round((parse(el.value) + parseFloat(btn.dataset.step)) * 100) / 100);
+  el.value = v.toLocaleString('fr-FR', { maximumFractionDigits: 2 });
+  update();
+}));
+update();
+</script>
+</body>
+</html>
